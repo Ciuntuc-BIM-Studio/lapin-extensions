@@ -87,9 +87,14 @@ if (argv.includes('--upload')) {
   if (!server) die('DEPLOY_SERVER is not set (.env, see .env.example)');
   // Files are never deleted on the server (old versions stay downloadable); the site is replaced whole.
   for (const [from, to, del] of [[join(out, 'extensions') + '/', `${target}extensions/`, false], [join(out, 'site') + '/', `${target}site/`, true]]) {
-    const r = spawnSync('rsync', ['-rlt', '--chmod=D755,F644', ...(del ? ['--delete'] : []), from, to], { stdio: 'inherit' });
+    // No --chmod: macOS's rsync (openrsync) refuses it; the modes and owner are set on the server below.
+    const r = spawnSync('rsync', ['-rlt', ...(del ? ['--delete'] : []), from, to], { stdio: 'inherit' });
     if (r.status !== 0) die(`rsync to ${to} failed`);
   }
+  // The store container runs as 1000:1000 and reads only: directories 755, files 644.
+  const pub = `${dir}/store-data/public`;
+  const fix = spawnSync('ssh', ['-o', 'BatchMode=yes', server, `chown -R 1000:1000 '${pub}' && find '${pub}' -type d -exec chmod 755 {} + && find '${pub}' -type f -exec chmod 644 {} +`], { stdio: 'inherit' });
+  if (fix.status !== 0) die(`setting the modes under ${pub} failed`);
   console.log(`uploaded to ${target}`);
 } else {
   console.log(`To publish: node tools/publish.mjs --upload   (rsync to ${target})`);
