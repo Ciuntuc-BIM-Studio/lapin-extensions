@@ -1,0 +1,40 @@
+{
+  "schema": 1,
+  "id": "ro.ciuntucbimstudio.sablon-romania",
+  "name": "Șablon de proiect România",
+  "summary": "A project template set up the Romanian way: storeys named Fundații, Parter, Etaj 1 and Mansardă, and the parameters a building permit's documents ask for.",
+  "description": "An example project template made by Ciuntuc BIM Studio. Installed, it is in File → New from template…; a new project from it has the storeys and empty project parameters for the height regime, the plot's area, POT, CUT and the importance category and class. Check its settings against your own office standards.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Ciuntuc BIM Studio",
+    "github": "Ciuntuc-BIM-Studio",
+    "url": "https://ciuntucbimstudio.ro"
+  },
+  "license": "CC0-1.0",
+  "lapin": ">=0.1.860",
+  "kind": "template",
+  "tags": [
+    "romania",
+    "dtac",
+    "template",
+    "example"
+  ],
+  "languages": [
+    "ro"
+  ],
+  "permissions": [],
+  "contents": {
+    "file": "sablon-romania.lapin",
+    "items": [
+      "Niveluri: Fundații, Parter, Etaj 1, Mansardă",
+      "Parametri: regim de înălțime, suprafață teren, POT, CUT, categoria și clasa de importanță"
+    ]
+  },
+  "package": {
+    "url": "https://github.com/Ciuntuc-BIM-Studio/lapin-extensions/releases/download/sablon-romania-v1.0.0/sablon-romania.lapin",
+    "sha256": "9c9ce23ef6b197deca3c16feb0008e8f573709dfc82813a546564f0914c9049a",
+    "size": 6192
+  },
+  "homepage": "https://github.com/Ciuntuc-BIM-Studio/lapin-extensions/tree/main/extensions/ro.ciuntucbimstudio.sablon-romania",
+  "forum": "https://forum.lapinbim.com/c/lapin"
+}

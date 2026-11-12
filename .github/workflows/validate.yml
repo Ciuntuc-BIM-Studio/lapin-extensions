@@ -1,0 +1,57 @@
+# Every pull request: the manifests it adds or changes checked, their packages downloaded from the authors' releases and
+# checked (size, SHA-256, each kind's file), a changed extension's version raised, an extension changed by its own author
+# only. Content packs that pass are merged by a maintainer; a script is also read by a reviewer (Claude), and the
+# maintainer approves it. Node only, no dependencies.
+name: Validate
+
+on:
+  pull_request:
+    paths: ['extensions/**', 'tools/**', 'schema/**']
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: The extensions this change touches
+        id: changed
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            ids=$(git diff --name-only "origin/${{ github.base_ref }}...HEAD" -- extensions | cut -d/ -f2 | sort -u | paste -sd, -)
+          else
+            ids=""
+          fi
+          echo "ids=$ids" >> "$GITHUB_OUTPUT"
+          echo "Touched: ${ids:-every extension}"
+      - name: Check manifests and packages
+        env:
+          IDS: ${{ steps.changed.outputs.ids }}
+          AUTHOR: ${{ github.event.pull_request.user.login }}
+          ASSOCIATION: ${{ github.event.pull_request.author_association }}
+          BASE: ${{ github.base_ref }}
+        run: |
+          args=""
+          if [ -n "$IDS" ]; then args="$args --only $IDS"; fi
+          if [ -n "$BASE" ]; then args="$args --base origin/$BASE --pr-author $AUTHOR"; fi
+          case "$ASSOCIATION" in OWNER|MEMBER) args="$args --maintainer";; esac
+          node tools/validate.mjs $args
+      - name: Build the index
+        run: node tools/build-index.mjs
+      - name: Scripts need a code review
+        if: github.event_name == 'pull_request'
+        run: |
+          for f in $(git diff --name-only "origin/${{ github.base_ref }}...HEAD" -- 'extensions/*/manifest.json'); do
+            if [ -f "$f" ] && grep -q '"kind": *"script"' "$f"; then
+              echo "::notice file=$f::A script: merged after its code review (Claude) and the maintainer's approval."
+            fi
+          done

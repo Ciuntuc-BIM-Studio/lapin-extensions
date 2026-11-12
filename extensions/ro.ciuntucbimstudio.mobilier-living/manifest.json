@@ -1,0 +1,43 @@
+{
+  "schema": 1,
+  "id": "ro.ciuntucbimstudio.mobilier-living",
+  "name": "Mobilier living",
+  "summary": "Six living-room furniture types for My furniture: sideboard, TV unit, bookcase, sofa, armchair and coffee table.",
+  "description": "An example furniture pack made by Ciuntuc BIM Studio with Lapin's furniture configurator. Installed, the six types are in Interior → My furniture…, ready to insert or place in any project; each keeps its materials by name.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Ciuntuc BIM Studio",
+    "github": "Ciuntuc-BIM-Studio",
+    "url": "https://ciuntucbimstudio.ro"
+  },
+  "license": "CC-BY-4.0",
+  "lapin": ">=0.1.860",
+  "kind": "furniture",
+  "tags": [
+    "living",
+    "casework",
+    "example"
+  ],
+  "languages": [
+    "ro"
+  ],
+  "permissions": [],
+  "contents": {
+    "file": "mobilier-living.lapinlib",
+    "items": [
+      "Comodă stejar",
+      "Comodă TV nuc",
+      "Bibliotecă înaltă",
+      "Canapea 3 locuri",
+      "Fotoliu",
+      "Măsuță de cafea"
+    ]
+  },
+  "package": {
+    "url": "https://github.com/Ciuntuc-BIM-Studio/lapin-extensions/releases/download/mobilier-living-v1.0.0/mobilier-living.lapinlib",
+    "sha256": "5a024ccb7bf28ccdb0fdecdf5c407e374b7cd33077702de259dfede36d6b0460",
+    "size": 33291
+  },
+  "homepage": "https://github.com/Ciuntuc-BIM-Studio/lapin-extensions/tree/main/extensions/ro.ciuntucbimstudio.mobilier-living",
+  "forum": "https://forum.lapinbim.com/c/lapin"
+}
