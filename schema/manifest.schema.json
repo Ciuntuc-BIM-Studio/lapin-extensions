@@ -5,58 +5,275 @@
   "description": "One extension of the Lapin Extensions catalogue: extensions/<id>/manifest.json. tools/lib.mjs checks the same rules, and a few this schema cannot say (an SPDX expression's grammar, a range of versions, a content pack asking for no permission).",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema", "id", "name", "summary", "version", "author", "license", "lapin", "kind", "contents", "package"],
+  "required": [
+    "schema",
+    "id",
+    "name",
+    "summary",
+    "version",
+    "author",
+    "license",
+    "lapin",
+    "kind",
+    "contents",
+    "package"
+  ],
   "properties": {
-    "schema": { "const": 1, "description": "The manifest's own format." },
-    "id": { "type": "string", "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$", "maxLength": 64, "description": "Its folder's name: lowercase, dots and dashes, a reversed domain or your GitHub name first (ro.ciuntucbimstudio.mobilier-living, octocat.brick-hatches)." },
-    "name": { "type": "string", "minLength": 1, "maxLength": 80 },
-    "summary": { "type": "string", "minLength": 1, "maxLength": 200, "description": "One line for the list." },
-    "description": { "type": "string" },
-    "version": { "type": "string", "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$", "description": "Semantic versioning; raised with every change." },
+    "schema": {
+      "const": 1,
+      "description": "The manifest's own format."
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$",
+      "maxLength": 64,
+      "description": "Its folder's name: lowercase, dots and dashes, a reversed domain or your GitHub name first (ro.ciuntucbimstudio.mobilier-living, octocat.brick-hatches)."
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "description": "One line for the list."
+    },
+    "description": {
+      "type": "string"
+    },
+    "screenshots": {
+      "type": "array",
+      "maxItems": 6,
+      "items": {
+        "type": "string",
+        "pattern": "^(screenshot(-[1-9])?\\.(png|webp|jpg)|https://\\S+)$"
+      },
+      "description": "Pictures for store.lapinbim.com: files in the extension's folder (screenshot.webp, screenshot-2.png…) or https addresses."
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$",
+      "description": "Semantic versioning; raised with every change."
+    },
     "author": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["name"],
+      "required": [
+        "name"
+      ],
       "properties": {
-        "name": { "type": "string", "minLength": 1 },
-        "github": { "type": "string", "pattern": "^[A-Za-z0-9-]{1,39}$", "description": "The GitHub account that may change it." },
-        "url": { "type": "string", "pattern": "^https://" },
-        "email": { "type": "string" }
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "github": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9-]{1,39}$",
+          "description": "The GitHub account that may change it."
+        },
+        "url": {
+          "type": "string",
+          "pattern": "^https://"
+        },
+        "email": {
+          "type": "string"
+        },
+        "forum": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_.-]{1,60}$",
+          "description": "The author's user name on forum.lapinbim.com (set by store.lapinbim.com for what is submitted there; the store's author page)."
+        }
       }
     },
-    "license": { "type": "string", "minLength": 1, "description": "An SPDX licence expression (MIT, CC-BY-4.0, CC0-1.0, Apache-2.0 OR MIT): required, shown to the user before installing. Any is accepted; permissive ones are marked so, others \"read its terms\", non-commercial ones (CC-BY-NC-*, PolyForm-Noncommercial-1.0.0…) \"Non-commercial\"." },
-    "lapin": { "type": "string", "minLength": 1, "description": "The Lapin versions it works with: >=0.1.860, >=0.1.860 <0.3.0, ^0.1.900, *." },
-    "kind": { "enum": ["furniture", "template", "types", "profiles", "hatches", "titleBlock", "priceList", "script"] },
-    "tags": { "type": "array", "maxItems": 12, "items": { "type": "string", "minLength": 1, "maxLength": 30 } },
-    "languages": { "type": "array", "items": { "type": "string", "pattern": "^[a-z]{2}$" }, "description": "The languages of its content (ISO 639-1)." },
-    "permissions": { "type": "array", "items": { "enum": ["model.read", "model.write", "files.read", "files.write", "network", "process"] }, "description": "What a script asks for; a content pack asks for none." },
-    "requires": { "type": "array", "items": { "type": "string", "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$" }, "description": "Lapin modules it needs beyond its kind's (a script: scripting)." },
+    "license": {
+      "type": "string",
+      "minLength": 1,
+      "description": "An SPDX licence expression (MIT, CC-BY-4.0, CC0-1.0, Apache-2.0 OR MIT): required, shown to the user before installing. Any is accepted; permissive ones are marked so, others \"read its terms\", non-commercial ones (CC-BY-NC-*, PolyForm-Noncommercial-1.0.0…) \"Non-commercial\"."
+    },
+    "lapin": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The Lapin versions it works with: >=0.1.860, >=0.1.860 <0.3.0, ^0.1.900, *."
+    },
+    "kind": {
+      "enum": [
+        "furniture",
+        "template",
+        "types",
+        "profiles",
+        "hatches",
+        "titleBlock",
+        "priceList",
+        "script"
+      ]
+    },
+    "tags": {
+      "type": "array",
+      "maxItems": 12,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 30
+      }
+    },
+    "languages": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z]{2}$"
+      },
+      "description": "The languages of its content (ISO 639-1)."
+    },
+    "permissions": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "model.read",
+          "model.write",
+          "files.read",
+          "files.write",
+          "network",
+          "process"
+        ]
+      },
+      "description": "What a script asks for; a content pack asks for none."
+    },
+    "requires": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$"
+      },
+      "description": "Lapin modules it needs beyond its kind's (a script: scripting)."
+    },
     "contents": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["file"],
+      "required": [
+        "file"
+      ],
       "properties": {
-        "file": { "type": "string", "pattern": "^[^\\\\/]+\\.(lapinlib|lapin|lapintypes|lapinprofiles|pat|json|lapinprices|py)$", "description": "The package file's name (.lapinlib furniture, .lapin template, .lapintypes types, .lapinprofiles profiles, .pat hatches, .json title block, .lapinprices price list, .py script)." },
-        "items": { "type": "array", "items": { "type": "string" }, "description": "What it holds, shown before installing." }
+        "file": {
+          "type": "string",
+          "pattern": "^[^\\\\/]+\\.(lapinlib|lapin|lapintypes|lapinprofiles|pat|json|lapinprices|py)$",
+          "description": "The package file's name (.lapinlib furniture, .lapin template, .lapintypes types, .lapinprofiles profiles, .pat hatches, .json title block, .lapinprices price list, .py script)."
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "What it holds, shown before installing."
+        }
       }
     },
     "package": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["url", "sha256", "size"],
+      "required": [
+        "url",
+        "sha256",
+        "size"
+      ],
       "properties": {
-        "url": { "type": "string", "pattern": "^https://", "description": "The file in a GitHub release of the author's." },
-        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
-        "size": { "type": "integer", "minimum": 1, "maximum": 67108864 },
-        "mirror": { "type": "string", "pattern": "^https://", "description": "Set by the index build: lapinbim.com's copy." }
+        "url": {
+          "type": "string",
+          "pattern": "^https://",
+          "description": "The file in a GitHub release of the author's."
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "size": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 67108864
+        },
+        "mirror": {
+          "type": "string",
+          "pattern": "^https://",
+          "description": "Set by the index build: lapinbim.com's copy."
+        },
+        "download": {
+          "type": "string",
+          "pattern": "^https://",
+          "description": "Set by the index build: the store's counting address (store.lapinbim.com/api/download/<id>/<version>), which redirects to lapinbim.com's copy."
+        },
+        "signature": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "keyId",
+            "value"
+          ],
+          "properties": {
+            "keyId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{16}$"
+            },
+            "value": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9+/]{86}==$"
+            }
+          },
+          "description": "Set when the index is signed: the store key's Ed25519 signature of 'lapin-extension-package\\n1\\n<id>\\n<version>\\n<sha256>\\n<size>\\n'."
+        }
       }
     },
-    "homepage": { "type": "string", "pattern": "^https://" },
-    "forum": { "type": "string", "pattern": "^https://", "description": "Its topic on forum.lapinbim.com." },
-    "indicative": { "type": "boolean", "description": "A price list's prices (and norms) are the author's and indicative: true for every price list." }
+    "homepage": {
+      "type": "string",
+      "pattern": "^https://"
+    },
+    "forum": {
+      "type": "string",
+      "pattern": "^https://",
+      "description": "Its topic on forum.lapinbim.com."
+    },
+    "indicative": {
+      "type": "boolean",
+      "description": "A price list's prices (and norms) are the author's and indicative: true for every price list."
+    }
   },
   "allOf": [
-    { "if": { "properties": { "kind": { "const": "priceList" } } }, "then": { "required": ["indicative"], "properties": { "indicative": { "const": true } } } },
-    { "if": { "properties": { "kind": { "not": { "const": "script" } } } }, "then": { "properties": { "permissions": { "maxItems": 0 } } } }
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "priceList"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "indicative"
+        ],
+        "properties": {
+          "indicative": {
+            "const": true
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "not": {
+              "const": "script"
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "permissions": {
+            "maxItems": 0
+          }
+        }
+      }
+    }
   ]
 }

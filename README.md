@@ -34,7 +34,7 @@ To publish a new version: release the new file, raise `version` in the manifest 
 
 ### The manifest
 
-The full schema is [`schema/manifest.schema.json`](schema/manifest.schema.json). Required: `schema` (1), `id`, `name`, `summary`, `version`, `author.name`, `license`, `lapin`, `kind`, `contents.file`, `package` (`url`, `sha256`, `size`). Optional: `description`, `author.github`/`url`, `tags`, `languages`, `permissions` (scripts only), `requires`, `contents.items` (what it holds, shown before installing), `homepage`, `forum` (its topic on [forum.lapinbim.com](https://forum.lapinbim.com)), `indicative` (true, required for price lists).
+The full schema is [`schema/manifest.schema.json`](schema/manifest.schema.json). Required: `schema` (1), `id`, `name`, `summary`, `version`, `author.name`, `license`, `lapin`, `kind`, `contents.file`, `package` (`url`, `sha256`, `size`). Optional: `description`, `screenshots`, `author.github`/`url`/`forum`, `tags`, `languages`, `permissions` (scripts only), `requires`, `contents.items` (what it holds, shown before installing), `homepage`, `forum` (its topic on [forum.lapinbim.com](https://forum.lapinbim.com)), `indicative` (true, required for price lists).
 
 `lapin` is the range of Lapin versions it works with: `>=0.1.860`, `>=0.1.860 <0.3.0`, `^0.1.900`, `*`. Lapin shows the extension to every version, and offers Install only to those in the range.
 
@@ -52,7 +52,7 @@ The full schema is [`schema/manifest.schema.json`](schema/manifest.schema.json).
 
 - **Automatic** (every pull request, `.github/workflows/validate.yml`): the manifest against the schema, the file downloaded and its size and SHA-256 compared, the file checked as its kind's (a furniture library's items, a type pack's types, a `.pat` file's patterns, a price list's rows…), the catalogue's own rules tested (`npm test`), a changed extension's version raised, the author matching.
 - **By hand**: a maintainer merges content packs that pass. A script is also read, line by line, by a reviewer (Claude) for what it does and whether it matches its declared permissions, and approved by the maintainer.
-- **Removal**: an extension that breaks the rules, or one its author asks to remove, is taken out of the index. To report one, open an issue or write to ionut@ciuntucbimstudio.ro.
+- **Removal**: an extension that breaks the rules, or one its author asks to remove, is taken out of the index. To report one, open an issue or write to hello@lapinbim.com (the procedure: `legal/notice-and-action.md`).
 
 The catalogue is free; publishing and installing cost nothing. The catalogue is run by Ciuntuc BIM Studio SRL.
 
@@ -66,13 +66,28 @@ node tools/build-index.mjs --local                  # dist/index.json naming the
 
 Then in Lapin: **File → Extensions… → Catalogue…** and the path of `dist/index.json` (or start Lapin's development build with `LAPIN_EXTENSIONS_INDEX=/path/to/dist/index.json pnpm dev`). A firm can keep its own catalogue the same way, in a shared folder.
 
+## The store, store.lapinbim.com
+
+The store is the catalogue's web face: a page per extension (description, screenshots, versions, licence, the Lapin versions it works with, size, SHA-256, author, homepage, forum topic, how to install it), author pages, and the author dashboard. Its pages are generated from this repository by `site/build.mjs` (Node, no dependencies; `npm run site` → `dist/site/`); the dashboard, the sign-in with a forum.lapinbim.com account, the submissions and the download counts are the store service's, in Lapin's repository (`deploy/store/`).
+
+**Publishing through the store**: sign in at store.lapinbim.com with your forum account, fill in the form and upload the file. The store keeps the file at `https://store.lapinbim.com/packages/<id>/<version>/<file>` (that address goes in the manifest's `package.url`) and opens the pull request here for you, with `author.forum` set to your forum name; the same checks run on it. Only the forum account that first published an extension through the store can publish its new versions there.
+
+**Screenshots**: up to six, listed in `screenshots`: files in the extension's folder (`screenshot.webp`, `screenshot-2.png`…, at most 2 MB each) or https addresses.
+
+The legal drafts (terms of use, author terms, privacy notice, notice and action) are in `legal/` (English, with Romanian copies in `legal/ro/`), **drafts pending a lawyer's review**.
+
 ## Publishing the index (maintainers)
 
 ```sh
-node tools/build-index.mjs --mirror https://lapinbim.com/extensions/files/
+node tools/publish.mjs              # dist/publish/: the index (signed), its signature, the package copies, the store's pages
+node tools/publish.mjs --upload     # the same, then rsync to the server (DEPLOY_SERVER in .env, see .env.example)
 ```
 
-writes `index.json`, each package also named at its copy on lapinbim.com (`<mirror><id>/<version>/<file>`), which the browser edition reads (GitHub's release files answer no browser). Copy `index.json` to `/extensions/index.json` and each package, after checking its SHA-256, to its copy's path.
+`publish.mjs` builds the index with each package named at its copy on lapinbim.com (`package.mirror`: `https://lapinbim.com/extensions/files/<id>/<version>/<file>`, which the browser edition reads) and at the store's counting address (`package.download`: `https://store.lapinbim.com/api/download/<id>/<version>`, which counts the download, without any personal data, and redirects to the copy). It downloads each package from its `url` and keeps it only when its size and SHA-256 are the manifest's.
+
+**Signing.** The index is signed by the catalogue's own Ed25519 key, separate from the Lapin app updater's: each package gets `package.signature` (over its id, version, SHA-256 and size: `packageMessage` in `tools/lib.mjs`), and the index's exact bytes get `index.json.sig` (`{"format": "lapin-signature", "version": 1, "keyId", "value"}`). Lapin carries the public key and, from the build that carries it, refuses an unsigned or wrongly signed default catalogue; a catalogue of your own may be unsigned (Lapin warns). The key is made once by Lapin's `node scripts/store-key.mjs` (an encrypted file, `~/.lapin/store-key.pem`, its password in the macOS keychain item `lapin-store-key`) and never leaves the maintainer's computer: signing happens there, in `publish.mjs`. `--unsigned` publishes before the key exists.
+
+`node tools/build-index.mjs --mirror … --download …` alone writes the same index unsigned, in `index.json`.
 
 ## Licence
 

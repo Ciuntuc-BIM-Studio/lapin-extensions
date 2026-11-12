@@ -19,6 +19,13 @@ const ID = /^[a-z0-9]+(?:[.-][a-z0-9]+)*$/;
 const SEMVER = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-([0-9A-Za-z.-]+))?(?:\+[0-9A-Za-z.-]+)?$/;
 const SHA256 = /^[0-9a-f]{64}$/;
 const SPDX_TOKEN = /^(?:[A-Za-z0-9][A-Za-z0-9.+-]*|LicenseRef-[A-Za-z0-9.-]+)$/;
+const FORUM_USER = /^[A-Za-z0-9_.-]{1,60}$/;
+/** A screenshot: a file in the extension's folder (screenshot.webp, screenshot-2.png…) or an https address. */
+export const SCREENSHOT_FILE = /^screenshot(?:-[1-9])?\.(?:png|webp|jpg)$/;
+export const MAX_SCREENSHOTS = 6;
+const isScreenshot = (x) => typeof x === 'string' && (SCREENSHOT_FILE.test(x) || /^https:\/\/[^\s"'<>]+$/i.test(x));
+/** A signature by a store key (docs/plan-extensions.md §9.7 in lapin-pro): the key's id (16 hex) and 64 bytes in base64. */
+export const isSignature = (s) => !!s && typeof s === 'object' && /^[0-9a-f]{16}$/.test(s.keyId ?? '') && /^[A-Za-z0-9+/]{86}==$/.test(s.value ?? '');
 const str = (v) => typeof v === 'string' && v.trim().length > 0;
 const https = (u) => /^https:\/\/[^\s/$.?#].[^\s]*$/i.test(u);
 
@@ -99,6 +106,7 @@ export function validateManifest(o, { local = false } = {}) {
   else {
     if (a.github !== undefined && (!str(a.github) || !/^[A-Za-z0-9-]{1,39}$/.test(a.github))) e.push('author.github must be a GitHub user name.');
     if (a.url !== undefined && (!str(a.url) || !https(a.url))) e.push('author.url must be an https address.');
+    if (a.forum !== undefined && (!str(a.forum) || !FORUM_USER.test(a.forum))) e.push('author.forum must be a user name on forum.lapinbim.com.');
   }
   if (!str(o.license)) e.push('license is required: an SPDX expression (MIT, CC-BY-4.0…).');
   else if (!isSpdx(o.license)) e.push(`license „${o.license}” is not an SPDX expression.`);
@@ -123,12 +131,25 @@ export function validateManifest(o, { local = false } = {}) {
     if (!str(p.sha256) || !SHA256.test(p.sha256)) e.push("package.sha256 must be the file's SHA-256, 64 lowercase hex digits.");
     if (!Number.isInteger(p.size) || p.size <= 0 || p.size > MAX_PACKAGE) e.push(`package.size must be the file's size in bytes, at most ${MAX_PACKAGE}.`);
     if (p.mirror !== undefined && (!str(p.mirror) || !https(p.mirror))) e.push('package.mirror must be an https address.');
+    if (p.download !== undefined && (!str(p.download) || !https(p.download))) e.push('package.download must be an https address.');
+    if (p.signature !== undefined && !isSignature(p.signature)) e.push('package.signature must be { keyId, value }: a store key id and an Ed25519 signature in base64.');
   }
+  if (o.screenshots !== undefined && (!Array.isArray(o.screenshots) || o.screenshots.length > MAX_SCREENSHOTS || o.screenshots.some((x) => !isScreenshot(x)))) e.push(`screenshots must be at most ${MAX_SCREENSHOTS} https addresses or files of its folder (screenshot.webp, screenshot-2.png).`);
   for (const k of ['homepage', 'forum']) if (o[k] !== undefined && (!str(o[k]) || !https(o[k]))) e.push(`${k} must be an https address.`);
   if (o.kind === 'priceList' && o.indicative !== true) e.push('A price list says its prices are indicative: indicative must be true.');
   if (o.indicative !== undefined && typeof o.indicative !== 'boolean') e.push('indicative must be true or false.');
   return e;
 }
+
+// ------------------------------------------------------------ what the store key signs
+
+/**
+ * The text a package's signature is over: its id, version, SHA-256 and size, so a signed manifest names one exact file.
+ * Lapin builds the same text (ui/src/platform/extensions/signature.ts in lapin-pro).
+ */
+export const packageMessage = (m) => `lapin-extension-package\n1\n${m.id}\n${m.version}\n${m.package.sha256}\n${m.package.size}\n`;
+/** A store key's id: the first 16 hex digits of the SHA-256 of its 32 raw public bytes. */
+export const keyIdOf = (rawPublicKey) => sha256(rawPublicKey).slice(0, 16);
 
 // ------------------------------------------------------------ the package files, by kind
 

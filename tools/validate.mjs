@@ -9,10 +9,12 @@
 // A package is checked for its size and SHA-256 against the manifest, then as its kind's file (lib.mjs). Exit 1 on any
 // problem, each one printed. Node 22, no dependencies.
 import { execFileSync } from 'node:child_process';
-import { existsSync, readdirSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { checkPackage, isNonCommercial, isPermissive, MAX_PACKAGE, sha256, validateManifest } from './lib.mjs';
+import { checkPackage, isNonCommercial, isPermissive, MAX_PACKAGE, SCREENSHOT_FILE, sha256, validateManifest } from './lib.mjs';
+
+const MAX_SCREENSHOT = 2 * 1024 * 1024;
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const argv = process.argv.slice(2);
@@ -58,14 +60,17 @@ const fail = (id, msg) => { problems++; console.error(`✗ ${id}: ${msg}`); };
 for (const id of ids) {
   const path = join(dir, id, 'manifest.json');
   if (!existsSync(path)) { fail(id, 'no manifest.json in its folder'); continue; }
-  const extra = readdirSync(join(dir, id)).filter((f) => !['manifest.json', 'README.md', 'icon.png', 'screenshot.png', 'screenshot.webp'].includes(f));
-  if (extra.length) fail(id, `only manifest.json, README.md, icon.png and screenshots go in its folder (the package goes in a release): ${extra.join(', ')}`);
+  const files = readdirSync(join(dir, id));
+  const extra = files.filter((f) => !['manifest.json', 'README.md', 'icon.png'].includes(f) && !SCREENSHOT_FILE.test(f));
+  if (extra.length) fail(id, `only manifest.json, README.md, icon.png and screenshots (screenshot.webp, screenshot-2.png…) go in its folder (the package goes in a release): ${extra.join(', ')}`);
+  for (const f of files.filter((x) => SCREENSHOT_FILE.test(x))) if (statSync(join(dir, id, f)).size > MAX_SCREENSHOT) fail(id, `${f} is bigger than ${MAX_SCREENSHOT / 1024 / 1024} MB`);
   let m;
   try { m = JSON.parse(readFileSync(path, 'utf8')); } catch (e) { fail(id, `manifest.json is not JSON: ${e.message}`); continue; }
   const errs = validateManifest(m);
   for (const e of errs) fail(id, e);
   if (errs.length) continue;
   if (m.id !== id) { fail(id, `its folder is named ${id}, its id is ${m.id}`); continue; }
+  for (const s of m.screenshots ?? []) if (SCREENSHOT_FILE.test(s) && !files.includes(s)) fail(id, `screenshots names ${s}, which is not in its folder`);
   const before = previous(id);
   if (before && JSON.stringify(before) !== JSON.stringify(m)) {
     if (!newer(m.version, before.version)) fail(id, `changed, so its version must be higher than ${before.version}`);

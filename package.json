@@ -4,13 +4,17 @@
   "description": "The catalogue of Lapin Extensions: one manifest per extension, the index built from them, the checks a pull request passes.",
   "license": "MIT",
   "type": "module",
-  "engines": { "node": ">=22" },
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
-    "test": "node --test tools/lib.test.mjs",
+    "test": "node --test tools/lib.test.mjs tools/sign.test.mjs site/build.test.mjs",
     "validate": "node tools/validate.mjs",
     "validate:local": "node tools/validate.mjs --local",
     "index": "node tools/build-index.mjs",
     "index:local": "node tools/build-index.mjs --local",
-    "examples": "node tools/make-examples.mjs"
+    "examples": "node tools/make-examples.mjs",
+    "site": "node site/build.mjs",
+    "publish": "node tools/publish.mjs"
   }
 }

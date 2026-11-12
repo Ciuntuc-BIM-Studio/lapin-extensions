@@ -6,7 +6,7 @@ name: Validate
 
 on:
   pull_request:
-    paths: ['extensions/**', 'tools/**', 'schema/**']
+    paths: ['extensions/**', 'tools/**', 'schema/**', 'site/**']
   push:
     branches: [main]
 
@@ -24,7 +24,7 @@ jobs:
         with:
           node-version: 22
       - name: The catalogue's own rules
-        run: node --test tools/lib.test.mjs
+        run: npm test
       - name: The extensions this change touches
         id: changed
         run: |
