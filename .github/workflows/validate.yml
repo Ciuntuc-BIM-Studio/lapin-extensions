@@ -23,6 +23,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - name: The catalogue's own rules
+        run: node --test tools/lib.test.mjs
       - name: The extensions this change touches
         id: changed
         run: |

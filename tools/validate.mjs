@@ -12,7 +12,7 @@ import { execFileSync } from 'node:child_process';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { checkPackage, MAX_PACKAGE, sha256, validateManifest } from './lib.mjs';
+import { checkPackage, isNonCommercial, isPermissive, MAX_PACKAGE, sha256, validateManifest } from './lib.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const argv = process.argv.slice(2);
@@ -78,7 +78,8 @@ for (const id of ids) {
     else if (sha256(bytes) !== m.package.sha256) fail(id, `the package's SHA-256 is ${sha256(bytes)}, the manifest says ${m.package.sha256}`);
     else {
       const items = checkPackage(m.kind, bytes);
-      console.log(`✓ ${id} ${m.version} (${m.kind}, ${m.license})${items.length ? `: ${items.slice(0, 6).join(', ')}${items.length > 6 ? '…' : ''}` : ''}`);
+      const terms = isNonCommercial(m.license) ? ", non-commercial" : isPermissive(m.license) ? ", permissive" : ", read its terms";
+      console.log(`✓ ${id} ${m.version} (${m.kind}, ${m.license}${terms})${items.length ? `: ${items.slice(0, 6).join(', ')}${items.length > 6 ? '…' : ''}` : ''}`);
     }
   } catch (e) { fail(id, `package: ${e.message}`); }
 }

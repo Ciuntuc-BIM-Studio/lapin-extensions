@@ -6,6 +6,7 @@
   "type": "module",
   "engines": { "node": ">=22" },
   "scripts": {
+    "test": "node --test tools/lib.test.mjs",
     "validate": "node tools/validate.mjs",
     "validate:local": "node tools/validate.mjs --local",
     "index": "node tools/build-index.mjs",

@@ -5,6 +5,7 @@ import { createHash } from 'node:crypto';
 export const KINDS = {
   furniture: { ext: ['lapinlib'], code: false },
   template: { ext: ['lapin'], code: false },
+  types: { ext: ['lapintypes'], code: false },
   profiles: { ext: ['lapinprofiles'], code: false },
   hatches: { ext: ['pat'], code: false },
   titleBlock: { ext: ['json'], code: false },
@@ -39,6 +40,37 @@ export function isSpdx(expr) {
   }
   return depth === 0 && !wantId;
 }
+
+/** An SPDX expression evaluated: whether it can be taken under licences for which `ok` holds (OR: either side; AND: both). */
+function holds(expr, ok) {
+  if (!isSpdx(expr)) return false;
+  const tokens = String(expr).replace(/[()]/g, ' $& ').trim().split(/\s+/);
+  let i = 0;
+  const atom = () => {
+    if (tokens[i] === '(') { i++; const v = or(); i++; return v; }
+    const id = tokens[i++].replace(/\+$/, '');
+    if (tokens[i] === 'WITH') i += 2;
+    return ok(id);
+  };
+  const and = () => { let v = atom(); while (tokens[i] === 'AND') { i++; v = atom() && v; } return v; };
+  const or = () => { let v = and(); while (tokens[i] === 'OR') { i++; v = and() || v; } return v; };
+  return or();
+}
+
+/** The licences Lapin calls permissive (shown so); others are accepted and shown with "read its terms". */
+export const PERMISSIVE = new Set(['MIT', 'MIT-0', 'Apache-2.0', 'BSD-2-Clause', 'BSD-3-Clause', 'ISC', '0BSD', 'Zlib', 'Unlicense', 'CC0-1.0', 'CC-BY-4.0', 'PDDL-1.0', 'ODC-By-1.0', 'BSL-1.0', 'PSF-2.0']);
+export const isPermissive = (expr) => holds(expr, (id) => PERMISSIVE.has(id));
+
+/** Licences forbidding commercial use besides the Creative Commons NC family (any id with -NC). */
+export const NON_COMMERCIAL = new Set(['PolyForm-Noncommercial-1.0.0', 'NCGL-UK-2.0']);
+export const isNonCommercialId = (id) => /-NC(?:-|$)/i.test(id) || NON_COMMERCIAL.has(id) || /^LicenseRef-.*non-?commercial/i.test(id);
+
+/**
+ * Whether an extension may not be used commercially: no way to take it but under a non-commercial licence (`MIT OR
+ * CC-BY-NC-4.0` can be taken under MIT). Accepted in the catalogue, marked „Non-commercial” in Lapin (lapin-pro:
+ * ui/src/platform/extensions/manifest.ts, the same rule) and in what validate.mjs prints.
+ */
+export const isNonCommercial = (expr) => isSpdx(expr) && !holds(expr, (id) => !isNonCommercialId(id));
 
 /** Whether a range of Lapin versions reads (>=0.1.860, >=0.1.860 <0.3.0, ^0.1.900, ~1.2.0, 0.1.x, *, ranges joined by ||). */
 export function isRange(range) {
@@ -117,6 +149,20 @@ export function checkPackage(kind, bytes) {
       // A .lapin is a zip (format 3, docs/format-lapin.md in lapin-pro): its local file header first.
       if (bytes.length < 22 || bytes[0] !== 0x50 || bytes[1] !== 0x4b || bytes[2] !== 0x03 || bytes[3] !== 0x04) throw new Error('not a .lapin file (a zip)');
       return [];
+    }
+    case 'types': {
+      // A type pack (Manage → Type packs… → Export types…, the engine's types.export): types with what they are made of.
+      const o = json(bytes);
+      if (o.format !== 'lapin-type-pack' || typeof o.version !== 'number' || o.version > 1) throw new Error('not a Lapin type pack, version 1 (Manage → Type packs… → Export types…)');
+      const item = (t) => str(t?.ref) && str(t?.class) && str(t?.name) && t.attrs && typeof t.attrs === 'object' && !Array.isArray(t.attrs);
+      if (!Array.isArray(o.types) || !o.types.length) throw new Error('the type pack has no type');
+      if (!o.types.every(item) || (o.resources !== undefined && (!Array.isArray(o.resources) || !o.resources.every(item)))) throw new Error('an item has no ref, class, name or attrs');
+      if (o.types.some((t) => !t.class.endsWith('Type'))) throw new Error('a type pack holds types only');
+      const refs = [...o.types, ...(o.resources ?? [])].map((t) => t.ref);
+      if (new Set(refs).size !== refs.length) throw new Error('a ref is in the pack twice');
+      if (o.types.some((t) => t.material !== undefined && !(o.resources ?? []).some((r) => r.ref === t.material))) throw new Error("a type's material is not in the pack");
+      if ((o.resources ?? []).some((r) => /^Ifc(Project|Site|Building|BuildingStorey|Space|Rel)/.test(r.class))) throw new Error('the spatial structure and relationships do not come with types');
+      return o.types.map((t) => t.name);
     }
     case 'profiles': {
       const o = json(bytes);

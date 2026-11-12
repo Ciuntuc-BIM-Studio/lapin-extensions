@@ -1,6 +1,6 @@
 # Lapin Extensions
 
-The free catalogue of extensions for [Lapin](https://github.com/Ciuntuc-BIM-Studio/lapin-pro), the open-source BIM modeller: furniture packs, project templates, profile libraries, hatch patterns, title blocks and price lists made by Lapin's users, and Python scripts. In Lapin: **File → Extensions…**.
+The free catalogue of extensions for [Lapin](https://github.com/Ciuntuc-BIM-Studio/lapin-pro), the open-source BIM modeller: furniture packs, project templates, types (walls, floors, doors, windows…), profile libraries, hatch patterns, title blocks and price lists made by Lapin's users, and Python scripts. In Lapin: **File → Extensions…**.
 
 This repository holds one manifest per extension and the tools that check them and build the catalogue's index (served at `https://lapinbim.com/extensions/index.json`). The packages themselves live in their authors' GitHub releases; the manifest names each file and its SHA-256, and Lapin installs only that exact file.
 
@@ -10,10 +10,11 @@ This repository holds one manifest per extension and the tools that check them a
 |---|---|---|---|
 | `furniture` | `.lapinlib` | Interior → My furniture… | My furniture → Export |
 | `template` | `.lapin` | File → New from template… | File → Save as template…, then Export |
+| `types` | `.lapintypes` | the project open when it is installed (Installed → Add its types to this project, for another) | Manage → Type packs… → Export types… (wall, floor, door, window, column, beam, stair… types with their layers, materials, profiles and parameters) |
 | `profiles` | `.lapinprofiles` | the profile libraries | Profile libraries → save a library to a folder |
 | `hatches` | `.pat` | My patterns (Manage → Materials) | any AutoCAD-style `.pat` file |
 | `titleBlock` | `.json` | the title blocks | Title blocks → Export |
-| `priceList` | `.lapinprices` | Construction → Price lists… | `{"format": "lapin-price-list", "version": 1, "name", "currency", "indicative": true, "rows"}` |
+| `priceList` | `.lapinprices` | Construction → Price lists… | Price lists… → a list on this computer → Export .lapinprices (`{"format": "lapin-price-list", "version": 1, "name", "currency", "indicative": true, "rows"}`) |
 | `script` | `.py` | kept for Lapin's Python console | a Python file starting with `# lapin: name="…", version="…"` |
 
 Content packs hold no code: Lapin reads them with its own importers and never runs anything. Scripts install on the desktop only, show what they ask for (`permissions`), and run once Lapin has its Python console, only when the user runs them.
@@ -39,7 +40,8 @@ The full schema is [`schema/manifest.schema.json`](schema/manifest.schema.json).
 
 ## Rules
 
-- **A licence is required**: an [SPDX expression](https://spdx.org/licenses/) in `license` (`MIT`, `CC-BY-4.0`, `CC0-1.0`, `Apache-2.0 OR MIT`…). Lapin shows it before installing; permissive ones are marked so, the others say "read its terms".
+- **A licence is required**: an [SPDX expression](https://spdx.org/licenses/) in `license` (`MIT`, `CC-BY-4.0`, `CC0-1.0`, `Apache-2.0 OR MIT`…). Lapin shows it before installing; permissive ones are marked so, the others say "read its terms". Any licence is accepted, `LicenseRef-…` too.
+- **Non-commercial licences are accepted and marked.** An extension that can be taken only under a non-commercial licence (`CC-BY-NC-4.0`, `CC-BY-NC-SA-4.0`, `PolyForm-Noncommercial-1.0.0`, a `LicenseRef-…NonCommercial`) is shown as **Non-commercial** in Browse and its details, and `validate.mjs` prints it so; `MIT OR CC-BY-NC-4.0` can be taken under MIT and is not.
 - **Only what you may share.** Your own work, or work whose licence lets you redistribute it, credited as it asks. No models, textures or images taken from other catalogues without their licence allowing it.
 - **Prices and norms are indicative.** A price list says so (`indicative: true`), and Lapin shows it as the author's indicative values.
 - **No code in content packs.** A script is code: it is read by a reviewer before it is merged.
@@ -48,7 +50,7 @@ The full schema is [`schema/manifest.schema.json`](schema/manifest.schema.json).
 
 ## Review
 
-- **Automatic** (every pull request, `.github/workflows/validate.yml`): the manifest against the schema, the file downloaded and its size and SHA-256 compared, the file checked as its kind's (a furniture library's items, a `.pat` file's patterns, a price list's rows…), a changed extension's version raised, the author matching.
+- **Automatic** (every pull request, `.github/workflows/validate.yml`): the manifest against the schema, the file downloaded and its size and SHA-256 compared, the file checked as its kind's (a furniture library's items, a type pack's types, a `.pat` file's patterns, a price list's rows…), the catalogue's own rules tested (`npm test`), a changed extension's version raised, the author matching.
 - **By hand**: a maintainer merges content packs that pass. A script is also read, line by line, by a reviewer (Claude) for what it does and whether it matches its declared permissions, and approved by the maintainer.
 - **Removal**: an extension that breaks the rules, or one its author asks to remove, is taken out of the index. To report one, open an issue or write to ionut@ciuntucbimstudio.ro.
 
