@@ -2,16 +2,16 @@
   "schema": 1,
   "id": "ro.ciuntucbimstudio.pereti-perimetrali",
   "name": "Perimeter walls",
-  "summary": "A Python script: four walls round a rectangle of the size you give, on the storey you choose, as one undo step.",
-  "description": "An example script made by Ciuntuc BIM Studio on lapinbim, Lapin's Python package (docs/python.md in lapin-pro). Installed from Lapin Extensions, it waits for Lapin's Python console and runs only when you run it; from a terminal, with Lapin open, it runs now: python perimeter_walls.py 8 6 2.8.",
-  "version": "1.0.0",
+  "summary": "A Python script and its tool in My tools: four walls round a rectangle of the size you give, on the storey you choose, as one undo step.",
+  "description": "An example script made by Ciuntuc BIM Studio on lapinbim, Lapin's Python package (docs/python.md in lapin-pro). Installed from Lapin Extensions, its tool Perimeter walls appears in My tools; the first click asks you to trust the script, then a dialog of Lapin's own asks for the sizes and the storey (lapin.ui.ask). From a terminal, with Lapin open: python perimeter_walls.py 8 6 2.8.",
+  "version": "1.1.0",
   "author": {
     "name": "Ciuntuc BIM Studio",
     "github": "Ciuntuc-BIM-Studio",
     "url": "https://ciuntucbimstudio.ro"
   },
   "license": "MIT",
-  "lapin": ">=0.1.860",
+  "lapin": ">=0.1.881",
   "kind": "script",
   "tags": [
     "walls",
@@ -32,13 +32,14 @@
   "contents": {
     "file": "perimeter_walls.py",
     "items": [
+      "Tool: Perimeter walls (asks width, depth, height and storey)",
       "perimeter_walls(width, depth, height, storey)"
     ]
   },
   "package": {
-    "url": "https://github.com/Ciuntuc-BIM-Studio/lapin-extensions/releases/download/pereti-perimetrali-v1.0.0/perimeter_walls.py",
-    "sha256": "6bcacb16286e5601d8a9bd0be2c3b59540df9fd3c756c0b671a09f2fb3c69863",
-    "size": 1466
+    "url": "https://github.com/Ciuntuc-BIM-Studio/lapin-extensions/releases/download/pereti-perimetrali-v1.1.0/perimeter_walls.py",
+    "sha256": "cbe884fe3b7e96a82272ca024c05e411f7e90896e2307acc3afb7408a6e9f1a1",
+    "size": 2352
   },
   "homepage": "https://github.com/Ciuntuc-BIM-Studio/lapin-extensions/tree/main/extensions/ro.ciuntucbimstudio.pereti-perimetrali",
   "forum": "https://forum.lapinbim.com/c/lapin"
