@@ -106,6 +106,14 @@
         "hatches",
         "titleBlock",
         "priceList",
+        "symbols",
+        "lineTypes",
+        "standards",
+        "rules",
+        "barShapes",
+        "parameters",
+        "mapping",
+        "families",
         "script"
       ]
     },
@@ -157,8 +165,8 @@
       "properties": {
         "file": {
           "type": "string",
-          "pattern": "^[^\\\\/]+\\.(lapinlib|lapin|lapintypes|lapinprofiles|pat|json|lapinprices|py)$",
-          "description": "The package file's name (.lapinlib furniture, .lapin template, .lapintypes types, .lapinprofiles profiles, .pat hatches, .json title block, .lapinprices price list, .py script)."
+          "pattern": "^[^\\\\/]+\\.(lapinlib|lapin|lapintypes|lapinprofiles|pat|json|lapinprices|lapinsymbols|lin|lapinstandards|lapinrules|lapinbarshapes|lapinparams|lapinmapping|lapinfamily|py)$",
+          "description": "The package file's name (.lapinlib furniture, .lapin template, .lapintypes types, .lapinprofiles profiles, .pat hatches, .json title block, .lapinprices price list, .lapinsymbols symbols, .lin line types, .lapinstandards drafting standards, .lapinrules rule packs, .lapinbarshapes bar shapes, .lapinparams shared parameters, .lapinmapping mappings, .lapinfamily families, .py script)."
         },
         "items": {
           "type": "array",
@@ -234,7 +242,7 @@
     },
     "indicative": {
       "type": "boolean",
-      "description": "A price list's prices (and norms) are the author's and indicative: true for every price list."
+      "description": "A price list's prices and a rule pack's values (and norms) are the author's and indicative: true for every price list and rule pack."
     }
   },
   "allOf": [
@@ -242,7 +250,10 @@
       "if": {
         "properties": {
           "kind": {
-            "const": "priceList"
+            "enum": [
+              "priceList",
+              "rules"
+            ]
           }
         }
       },

@@ -41,3 +41,21 @@ test('a type pack\'s file: its types, or why it is not one', () => {
   assert.throws(() => checkPackage('types', bytes({ ...pack, resources: [...pack.resources, { ref: 'w1', class: 'IfcMaterial', name: 'X', attrs: {} }] })), /twice/);
   assert.throws(() => checkPackage('types', bytes({ ...pack, resources: [...pack.resources, { ref: 'st', class: 'IfcBuildingStorey', name: 'Parter', attrs: {} }] })), /spatial structure/);
 });
+
+test('the library kinds: each file as its library writes it', () => {
+  const b = (o) => new TextEncoder().encode(typeof o === 'string' ? o : JSON.stringify(o));
+  assert.deepEqual(checkPackage('symbols', b({ format: 'lapin-symbols', version: 1, symbols: [{ name: 'North', def: { items: [{ type: 'circle' }] } }] })), ['North']);
+  assert.throws(() => checkPackage('symbols', b({ format: 'lapin-symbols', version: 1, symbols: [{ name: 'x', def: { items: [] } }] })), /draws nothing/);
+  assert.deepEqual(checkPackage('lineTypes', b('*DASHDOT, a\nA,12,-6,0,-6\n')), ['DASHDOT']);
+  assert.throws(() => checkPackage('lineTypes', b('*A\n*B\nA,1,-1\n')), /has no pattern/);
+  assert.deepEqual(checkPackage('standards', b({ format: 'lapin-standards', version: 1, name: 'DIN', drafting: {} })), ['DIN']);
+  assert.deepEqual(checkPackage('rules', b({ format: 'lapin-rules', version: 1, name: 'RO', indicative: true, stairs: {} })), ['RO']);
+  assert.throws(() => checkPackage('rules', b({ format: 'lapin-rules', version: 1, name: 'RO', indicative: false, stairs: {} })), /indicative/);
+  assert.deepEqual(checkPackage('barShapes', b({ format: 'lapin-bar-shapes', version: 1, shapes: [{ code: '21', label: 'L' }] })), ['21 L']);
+  assert.deepEqual(checkPackage('parameters', b({ format: 'lapin-parameters', version: 1, parameters: [{ name: 'Fire', kind: 'text' }] })), ['Fire']);
+  assert.deepEqual(checkPackage('mapping', b({ app: 'lapin', kind: 'layers', version: 1, layers: [{ layer: 'A-WALL' }] })), ['A-WALL']);
+  assert.deepEqual(checkPackage('families', b({ format: 'lapin-family', version: 1, name: 'Bracket', def: {} })), ['Bracket']);
+  assert.throws(() => checkPackage('families', b({ format: 'lapin-family', version: 1, name: 'x' })), /no definition/);
+  assert.ok(validateManifest(manifest({ kind: 'rules', contents: { file: 'ro.lapinrules' } })).includes('A rule pack says its values are indicative: indicative must be true.'));
+  assert.deepEqual(validateManifest(manifest({ kind: 'lineTypes', contents: { file: 'a.lin' } })), []);
+});

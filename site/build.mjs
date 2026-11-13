@@ -20,7 +20,7 @@ import { STRINGS, t } from './strings.mjs';
 const here = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(here, '..');
 
-export const KIND_ORDER = ['furniture', 'template', 'types', 'profiles', 'hatches', 'titleBlock', 'priceList', 'script'];
+export const KIND_ORDER = ['furniture', 'template', 'types', 'profiles', 'hatches', 'titleBlock', 'priceList', 'symbols', 'lineTypes', 'standards', 'rules', 'barShapes', 'parameters', 'mapping', 'families', 'script'];
 const LEGAL = [['terms-of-use', 'footer.terms'], ['author-terms', 'footer.authorTerms'], ['privacy', 'footer.privacy'], ['notice-and-action', 'footer.notice']];
 
 export const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
@@ -174,7 +174,7 @@ function extensionPage(lang, base, m, { versions = [], store }) {
       ${shots.length ? `<h2>${esc(T('x.screenshots'))}</h2><div class="shots">${shots.map((s, i) => `<a href="${s}"><img src="${s}" alt="${esc(m.name)} ${i + 1}" loading="lazy"></a>`).join('')}</div>` : ''}
       ${m.contents.items?.length ? `<h2>${esc(T('x.contents'))}</h2><ul class="items">${m.contents.items.map((i) => `<li>${esc(i)}</li>`).join('')}</ul>` : ''}
       ${KINDS[m.kind]?.code ? `<div class="notice warn"><p>${esc(T('x.code'))}</p>${m.permissions?.length ? `<p class="eyebrow">${esc(T('x.permissions'))}</p><ul>${m.permissions.map((p) => `<li>${esc(T(`perm.${p}`))}</li>`).join('')}</ul>` : ''}</div>` : ''}
-      ${m.kind === 'priceList' ? `<div class="notice"><p>${esc(T('x.indicative'))}</p></div>` : ''}
+      ${m.kind === 'priceList' || m.kind === 'rules' ? `<div class="notice"><p>${esc(T('x.indicative'))}</p></div>` : ''}
       <h2>${esc(T('x.versions'))}</h2>
       <table class="versions"><thead><tr><th>${esc(T('x.version'))}</th><th>${esc(T('x.lapin'))}</th><th>${esc(T('x.size'))}</th><th>${esc(T('x.versions.date'))}</th></tr></thead>
       <tbody>${vrows.map((v) => `<tr><td>${esc(v.version)}</td><td>Lapin ${esc(v.lapin ?? '')}</td><td>${v.size ? esc(sizeText(v.size)) : ''}</td><td>${v.date ? esc(v.date.slice(0, 10)) : ''}</td></tr>`).join('')}</tbody></table>

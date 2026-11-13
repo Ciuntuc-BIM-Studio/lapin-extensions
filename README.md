@@ -15,6 +15,14 @@ This repository holds one manifest per extension and the tools that check them a
 | `hatches` | `.pat` | My patterns (Manage → Materials) | any AutoCAD-style `.pat` file |
 | `titleBlock` | `.json` | the title blocks | Title blocks → Export |
 | `priceList` | `.lapinprices` | Construction → Price lists… | Price lists… → a list on this computer → Export .lapinprices (`{"format": "lapin-price-list", "version": 1, "name", "currency", "indicative": true, "rows"}`) |
+| `symbols` | `.lapinsymbols` | this computer's symbols (Manage → Symbols…); Installed → Add to this project | Manage → Symbols… → Export… |
+| `lineTypes` | `.lin` | this computer's files; Installed → Add to this project (straight into the project's line types) | any AutoCAD `.lin`, or Drafting standards → Line types → Export .lin… |
+| `standards` | `.lapinstandards` | this computer's files; Installed → Add to this project | Manage → Drafting standards → Export standards… |
+| `rules` | `.lapinrules` | this computer's files; Installed → Add to this project (a rule pack of the project). **Indicative**: `"indicative": true` in the manifest | Manage → Rules… → Export… |
+| `barShapes` | `.lapinbarshapes` | this computer's files; Installed → Add to this project (needs the rebar module) | Bar shapes → Export… |
+| `parameters` | `.lapinparams` | this computer's files; Installed → Add to this project | Shared parameters → Export .lapinparams… |
+| `mapping` | `.lapinmapping` | remembered by Lapin for Import table… (by column headings) and Convert drafting to… (by layer) | Import table… or Convert drafting to… → Save the mapping |
+| `families` | `.lapinfamily` | this computer's files; Installed → Add to this project (needs the studio module) | Studio → a family → Export |
 | `script` | `.py` | kept for Lapin's Python console | a Python file starting with `# lapin: name="…", version="…"` |
 
 Content packs hold no code: Lapin reads them with its own importers and never runs anything. Scripts install on the desktop only, show what they ask for (`permissions`), and run once Lapin has its Python console, only when the user runs them.
