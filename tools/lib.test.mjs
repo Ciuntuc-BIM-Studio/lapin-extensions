@@ -63,7 +63,7 @@ test('the library kinds: each file as its library writes it', () => {
 test('a paid extension (stage 2a): its purchase, its package only through the store, the kinds that may be sold', () => {
   const paid = (over = {}, pkg = {}) => manifest({
     license: 'LicenseRef-Ana-EULA',
-    purchase: { provider: 'lemonsqueezy', productId: '123456', checkoutUrl: 'https://ana.lemonsqueezy.com/buy/abc', terms: 'https://ana.example/terms', price: '29 EUR' },
+    purchase: { provider: 'gumroad', productId: '123456', checkoutUrl: 'https://ana.gumroad.com/l/abc', terms: 'https://ana.example/terms', price: '29 EUR' },
     package: { url: 'https://store.lapinbim.com/api/licensed/ro.ciuntucbimstudio.pereti-ro/1.0.0', sha256: 'a'.repeat(64), size: 100, ...pkg },
     ...over,
   });
@@ -72,7 +72,8 @@ test('a paid extension (stage 2a): its purchase, its package only through the st
   assert.equal(isPaid(manifest()), false);
   assert.deepEqual(validateManifest(paid({ purchase: { provider: 'gumroad', productId: '32-nPAicqbLj8B_WswVlMw==', checkoutUrl: 'https://ana.gumroad.com/l/walls', terms: 'https://ana.gumroad.com/terms' } })), []);
   const errs = (o) => validateManifest(o).join(' ');
-  assert.match(errs(paid({ purchase: { provider: 'paddle', productId: '1', checkoutUrl: 'https://x.ro', terms: 'https://x.ro' } })), /purchase.provider must be one of lemonsqueezy, gumroad/);
+  assert.match(errs(paid({ purchase: { provider: 'paddle', productId: '1', checkoutUrl: 'https://x.ro', terms: 'https://x.ro' } })), /purchase.provider must be one of gumroad/);
+  assert.match(errs(paid({ purchase: { provider: 'lemonsqueezy', productId: '1', checkoutUrl: 'https://x.ro', terms: 'https://x.ro' } })), /purchase.provider must be one of gumroad/, 'Lemon Squeezy is closing: no longer accepted');
   assert.match(errs(paid({ purchase: { provider: 'gumroad', productId: 'a b', checkoutUrl: 'http://x.ro', terms: 'https://x.ro' } })), /productId[\s\S]*checkoutUrl must be an https/);
   assert.match(errs(paid({ purchase: { provider: 'gumroad', productId: 'p', checkoutUrl: 'https://x.ro' } })), /purchase.terms/);
   assert.match(errs(paid({ purchase: { provider: 'gumroad', productId: 'p', checkoutUrl: 'https://x.ro', terms: 'https://x.ro', price: 'x'.repeat(41) } })), /purchase.price/);

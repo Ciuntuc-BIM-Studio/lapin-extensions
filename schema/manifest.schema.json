@@ -257,7 +257,6 @@
       "properties": {
         "provider": {
           "enum": [
-            "lemonsqueezy",
             "gumroad"
           ],
           "description": "The author's shop, whose public licence API the store asks."
@@ -265,7 +264,7 @@
         "productId": {
           "type": "string",
           "pattern": "^[A-Za-z0-9_=+/.-]{1,100}$",
-          "description": "The product's id at its provider (Lemon Squeezy: the product number; Gumroad: product_id)."
+          "description": "The product's id at its provider (Gumroad: product_id, from the product's Content tab)."
         },
         "checkoutUrl": {
           "type": "string",

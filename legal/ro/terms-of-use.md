@@ -19,7 +19,7 @@ Catalogul listează extensii pentru Lapin făcute de autorii lor: pachete de con
 
 ## 3a. Extensiile plătite
 
-- O extensie marcată **Plătită** e vândută de autorul ei prin magazinul lui (furnizorul numit pe pagina ei, de exemplu Lemon Squeezy sau Gumroad). Contractul de vânzare e între tine și autor (cu furnizorul lui ca merchant of record sau serviciu de plată); noi nu suntem parte la el. Prețul arătat în catalog și în Lapin e orientativ; prețul e cel din pagina de plată a vânzătorului.
+- O extensie marcată **Plătită** e vândută de autorul ei prin magazinul lui (furnizorul numit pe pagina ei, azi Gumroad). Contractul de vânzare e între tine și autor (cu furnizorul lui ca merchant of record sau serviciu de plată); noi nu suntem parte la el. Prețul arătat în catalog și în Lapin e orientativ; prețul e cel din pagina de plată a vânzătorului.
 - Termenii vânzătorului, legați de pe pagina extensiei („Vândută de … prin …”), guvernează vânzarea, factura, dreptul tău de retragere și rambursările. Rambursarea o ceri vânzătorului.
 - După cumpărare primești o **cheie de licență**. Lapin ți-o cere când instalează extensia și o trimite magazinului nostru, care o verifică la furnizorul vânzătorului și apoi îi dă lui Lapin fișierul. Cheia e păstrată pe calculatorul tău (în setările Lapin), nu de noi.
 - Lapin verifică din nou cheia când actualizează extensia. Dacă vânzătorul rambursează cumpărarea sau dezactivează cheia, extensia nu mai primește actualizări și Lapin spune asta; **ce e instalat rămâne instalat**. Fără conexiune la internet, o extensie instalată merge mai departe.

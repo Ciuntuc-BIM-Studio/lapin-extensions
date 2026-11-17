@@ -6,7 +6,7 @@ it; `tools/catalogue.test.mjs` reads it.
 
 A paid extension differs from a free one in three things:
 
-- `purchase`: `provider` (`lemonsqueezy` or `gumroad`), `productId` (the product's id at the provider), `checkoutUrl`
+- `purchase`: `provider` (`gumroad`, the only one accepted today), `productId` (the product's id at the provider), `checkoutUrl`
   (where it is bought), `terms` (the seller's terms of sale and refunds), and an optional `price`, shown as indicative.
 - `package.url` is the store's licensed address, `https://store.lapinbim.com/api/licensed/<id>/<version>`: the store gives
   the file only to a licence key its provider says is valid. No `mirror`, no `download`: there is no public copy.

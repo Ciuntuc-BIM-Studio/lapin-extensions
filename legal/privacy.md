@@ -24,7 +24,7 @@ We do not sell data, do not use it for advertising, and do no profiling. Browsin
 - **Cloudflare, Inc.** (the network in front of our servers, DNS and the connection to them): processes requests on our behalf; transfers outside the EU are covered by the EU–US Data Privacy Framework and standard contractual clauses.
 - **Hetzner Online GmbH**, Germany: hosts our servers.
 - **GitHub, Inc.**: the catalogue's public repository, where a submission becomes a pull request made by our account; what you put in the manifest (your author name, links) becomes public there.
-- **The seller's provider** of a paid extension (**Lemon Squeezy LLC** or **Gumroad, Inc.**, United States): receives the licence key you enter, from our server, to say whether it is valid; it already has your purchase as the seller's provider, under its own privacy policy. We send it nothing else about you.
+- **The seller's provider** of a paid extension (today **Gumroad, Inc.**, United States): receives the licence key you enter, from our server, to say whether it is valid; it already has your purchase as the seller's provider, under its own privacy policy. We send it nothing else about you.
 - **The forum** (forum.lapinbim.com, run by us on Discourse) is the identity provider; its own [privacy policy](https://forum.lapinbim.com/privacy) applies to your forum account.
 
 ## 4. Your rights

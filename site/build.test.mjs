@@ -21,7 +21,7 @@ const index = {
     base({ id: 'ro.x.prices', name: 'Prețuri', summary: 'Indicative prices', kind: 'priceList', license: 'CC-BY-NC-4.0', indicative: true, contents: { file: 'p.lapinprices' }, author: { name: 'Ana Pop', forum: 'ana' } }),
     base({ id: 'ro.x.paid', name: 'Paid walls', summary: 'Sold', kind: 'types', license: 'LicenseRef-Ana-EULA', contents: { file: 't.lapintypes' }, author: { name: 'Ana Pop', forum: 'ana' },
       package: { url: 'https://store.lapinbim.com/api/licensed/ro.x.paid/1.2.0', sha256: 'c'.repeat(64), size: 900 },
-      purchase: { provider: 'lemonsqueezy', productId: '42', checkoutUrl: 'https://ana.lemonsqueezy.com/buy/x', terms: 'https://ana.example/terms', price: '29 EUR' } }),
+      purchase: { provider: 'gumroad', productId: '42', checkoutUrl: 'https://ana.gumroad.com/l/x', terms: 'https://ana.example/terms', price: '29 EUR' } }),
     base({ id: 'ro.x.walls', name: 'Walls script', summary: 'Four walls', kind: 'script', license: 'GPL-3.0-only', permissions: ['model.write'], contents: { file: 'w.py' } }),
   ],
 };
@@ -87,8 +87,8 @@ test('a paid extension: Paid and its price on its card; Buy at the seller\'s, so
   assert.match(read('index.html'), /data-extension="ro.x.paid"[\s\S]*?data-paid[^>]*>Paid · 29 EUR/);
   assert.ok(!/data-extension="ro.x.living"[^]*?<\/a>/.exec(read('index.html'))[0].includes('data-paid'), 'a free one is not marked');
   const html = read('extension/ro.x.paid/index.html');
-  assert.ok(html.includes('href="https://ana.lemonsqueezy.com/buy/x"') && html.includes('data-buy-link'));
-  assert.ok(html.includes('Sold by Ana Pop through Lemon Squeezy.'));
+  assert.ok(html.includes('href="https://ana.gumroad.com/l/x"') && html.includes('data-buy-link'));
+  assert.ok(html.includes('Sold by Ana Pop through Gumroad.'));
   assert.ok(html.includes('href="https://ana.example/terms"'));
   assert.ok(html.includes('29 EUR, indicative'));
   assert.ok(!html.includes('data-download') && !html.includes('data-downloads='), 'no download, no public count');

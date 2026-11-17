@@ -24,7 +24,7 @@ Nu vindem date, nu le folosim pentru publicitate și nu facem profilare. Răsfoi
 - **Cloudflare, Inc.** (rețeaua din fața serverelor noastre, DNS-ul și legătura cu ele): prelucrează cererile în numele nostru; transferurile în afara UE sunt acoperite de Cadrul UE–SUA privind confidențialitatea datelor și de clauzele contractuale standard.
 - **Hetzner Online GmbH**, Germania: găzduiește serverele.
 - **GitHub, Inc.**: depozitul public al catalogului, unde o trimitere devine un pull request făcut de contul nostru; ce pui în manifest (numele de autor, legăturile) devine public acolo.
-- **Furnizorul vânzătorului** unei extensii plătite (**Lemon Squeezy LLC** sau **Gumroad, Inc.**, Statele Unite): primește de la serverul nostru cheia de licență pe care o introduci, ca să spună dacă e bună; are deja cumpărarea ta, ca furnizor al vânzătorului, după propria politică de confidențialitate. Nu îi trimitem nimic altceva despre tine.
+- **Furnizorul vânzătorului** unei extensii plătite (azi **Gumroad, Inc.**, Statele Unite): primește de la serverul nostru cheia de licență pe care o introduci, ca să spună dacă e bună; are deja cumpărarea ta, ca furnizor al vânzătorului, după propria politică de confidențialitate. Nu îi trimitem nimic altceva despre tine.
 - **Forumul** (forum.lapinbim.com, administrat de noi pe Discourse) e furnizorul de identitate; contului tău de pe forum i se aplică [politica lui de confidențialitate](https://forum.lapinbim.com/privacy).
 
 ## 4. Drepturile tale

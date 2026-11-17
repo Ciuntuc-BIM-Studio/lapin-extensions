@@ -19,7 +19,7 @@ The catalogue lists extensions for Lapin made by their authors: content packs (f
 
 ## 3a. Paid extensions
 
-- An extension marked **Paid** is sold by its author through their own shop (the provider its page names, for example Lemon Squeezy or Gumroad). The contract of sale is between you and the author (with their provider as merchant of record or payment service); we are not a party to it. The price shown in the catalogue and in Lapin is indicative; the price is the one at the seller's checkout.
+- An extension marked **Paid** is sold by its author through their own shop (the provider its page names, today Gumroad). The contract of sale is between you and the author (with their provider as merchant of record or payment service); we are not a party to it. The price shown in the catalogue and in Lapin is indicative; the price is the one at the seller's checkout.
 - The seller's terms, linked from the extension's page ("Sold by … through …"), govern the sale, the invoice, your right of withdrawal and refunds. Ask the seller for a refund.
 - After buying you receive a **licence key**. Lapin asks for it when it installs the extension and sends it to our store, which checks it with the seller's provider and then gives Lapin the file. The key is kept on your computer (in Lapin's settings), not by us.
 - Lapin checks the key again when it updates the extension. If the seller refunds the purchase or disables the key, the extension gets no more updates and Lapin says so; **what is installed stays installed**. Without an internet connection, an installed extension keeps working.

@@ -59,8 +59,8 @@ The full schema is [`schema/manifest.schema.json`](schema/manifest.schema.json).
 ## Selling an extension
 
 Content packs and Python scripts may be **sold by their authors** through their own shop; the catalogue takes no
-commission and is not a party to the sale (the author terms, section 5). Providers accepted today: **Lemon Squeezy** and
-**Gumroad**, both with a public licence-key API. A paid manifest adds:
+commission and is not a party to the sale (the author terms, section 5). Provider accepted today: **Gumroad**, with its public
+licence-key API (Lemon Squeezy closed sign-ups and stops on 31.03.2027). A paid manifest adds:
 
 ```json
 "purchase": {
