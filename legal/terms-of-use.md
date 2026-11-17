@@ -1,6 +1,6 @@
 # Lapin Extensions: terms of use
 
-**DRAFT — to be reviewed by a lawyer before publication.** Version 0.1, 12 November 2026.
+**DRAFT — to be reviewed by a lawyer before publication.** Version 0.2, 17 November 2026 (paid extensions added).
 
 ## 1. Who we are
 
@@ -8,7 +8,7 @@ Lapin Extensions (the catalogue at `https://lapinbim.com/extensions/`, the store
 
 ## 2. What the catalogue is
 
-The catalogue lists extensions for Lapin made by their authors: content packs (furniture, project templates, types, profiles, hatch patterns, title blocks, price lists) and Python scripts. We list them, keep copies of their files, check each file automatically and review scripts before they are listed. We do not make the extensions of other authors, and we do not sell them: in this phase every extension is free and we take no commission.
+The catalogue lists extensions for Lapin made by their authors: content packs (furniture, project templates, types, profiles, hatch patterns, title blocks, price lists) and Python scripts. We list them, keep copies of their files, check each file automatically and review scripts before they are listed. We do not make the extensions of other authors, and we do not sell them: most are free, some are sold by their authors (section 3a), and we take no commission.
 
 ## 3. Each extension is its author's
 
@@ -16,6 +16,13 @@ The catalogue lists extensions for Lapin made by their authors: content packs (f
 - We give no warranty for any extension: it is provided as it is, without any promise that it is fit for a purpose, accurate or complete.
 - **Prices and norms** in a price list are the author's and indicative only. Check them against your own before you rely on them.
 - **Scripts** can do on your computer what you can. Lapin never runs a script by itself; you run it, at your own risk, after reading what it asks for.
+
+## 3a. Paid extensions
+
+- An extension marked **Paid** is sold by its author through their own shop (the provider its page names, for example Lemon Squeezy or Gumroad). The contract of sale is between you and the author (with their provider as merchant of record or payment service); we are not a party to it. The price shown in the catalogue and in Lapin is indicative; the price is the one at the seller's checkout.
+- The seller's terms, linked from the extension's page ("Sold by … through …"), govern the sale, the invoice, your right of withdrawal and refunds. Ask the seller for a refund.
+- After buying you receive a **licence key**. Lapin asks for it when it installs the extension and sends it to our store, which checks it with the seller's provider and then gives Lapin the file. The key is kept on your computer (in Lapin's settings), not by us.
+- Lapin checks the key again when it updates the extension. If the seller refunds the purchase or disables the key, the extension gets no more updates and Lapin says so; **what is installed stays installed**. Without an internet connection, an installed extension keeps working.
 
 ## 4. Using the catalogue
 

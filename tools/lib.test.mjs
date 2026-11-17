@@ -1,7 +1,7 @@
 // The catalogue's rules (lib.mjs), as Lapin has them (lapin-pro: ui/src/platform/extensions/*.test.ts). npm test
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { checkPackage, isNonCommercial, isPermissive, isSpdx, validateManifest } from './lib.mjs';
+import { checkPackage, isNonCommercial, isPaid, isPermissive, isSpdx, PAID_KINDS, validateManifest } from './lib.mjs';
 
 const manifest = (over = {}) => ({
   schema: 1, id: 'ro.ciuntucbimstudio.pereti-ro', name: 'Pereți RO', summary: 'Wall types.', version: '1.0.0',
@@ -58,4 +58,31 @@ test('the library kinds: each file as its library writes it', () => {
   assert.throws(() => checkPackage('families', b({ format: 'lapin-family', version: 1, name: 'x' })), /no definition/);
   assert.ok(validateManifest(manifest({ kind: 'rules', contents: { file: 'ro.lapinrules' } })).includes('A rule pack says its values are indicative: indicative must be true.'));
   assert.deepEqual(validateManifest(manifest({ kind: 'lineTypes', contents: { file: 'a.lin' } })), []);
+});
+
+test('a paid extension (stage 2a): its purchase, its package only through the store, the kinds that may be sold', () => {
+  const paid = (over = {}, pkg = {}) => manifest({
+    license: 'LicenseRef-Ana-EULA',
+    purchase: { provider: 'lemonsqueezy', productId: '123456', checkoutUrl: 'https://ana.lemonsqueezy.com/buy/abc', terms: 'https://ana.example/terms', price: '29 EUR' },
+    package: { url: 'https://store.lapinbim.com/api/licensed/ro.ciuntucbimstudio.pereti-ro/1.0.0', sha256: 'a'.repeat(64), size: 100, ...pkg },
+    ...over,
+  });
+  assert.deepEqual(validateManifest(paid()), []);
+  assert.equal(isPaid(paid()), true);
+  assert.equal(isPaid(manifest()), false);
+  assert.deepEqual(validateManifest(paid({ purchase: { provider: 'gumroad', productId: '32-nPAicqbLj8B_WswVlMw==', checkoutUrl: 'https://ana.gumroad.com/l/walls', terms: 'https://ana.gumroad.com/terms' } })), []);
+  const errs = (o) => validateManifest(o).join(' ');
+  assert.match(errs(paid({ purchase: { provider: 'paddle', productId: '1', checkoutUrl: 'https://x.ro', terms: 'https://x.ro' } })), /purchase.provider must be one of lemonsqueezy, gumroad/);
+  assert.match(errs(paid({ purchase: { provider: 'gumroad', productId: 'a b', checkoutUrl: 'http://x.ro', terms: 'https://x.ro' } })), /productId[\s\S]*checkoutUrl must be an https/);
+  assert.match(errs(paid({ purchase: { provider: 'gumroad', productId: 'p', checkoutUrl: 'https://x.ro' } })), /purchase.terms/);
+  assert.match(errs(paid({ purchase: { provider: 'gumroad', productId: 'p', checkoutUrl: 'https://x.ro', terms: 'https://x.ro', price: 'x'.repeat(41) } })), /purchase.price/);
+  assert.match(errs(paid({ purchase: 'yes' })), /purchase must be/);
+  // No public copy: the store's licensed address for this id and version, no mirror, no counting address.
+  assert.match(errs(paid({}, { url: 'https://github.com/a/b/releases/download/v1/x.lapintypes' })), /package.url must be https:\/\/store.lapinbim.com\/api\/licensed\/ro.ciuntucbimstudio.pereti-ro\/1.0.0/);
+  assert.match(errs(paid({ version: '1.0.1' })), /api\/licensed\/ro.ciuntucbimstudio.pereti-ro\/1.0.1/);
+  assert.match(errs(paid({}, { mirror: 'https://lapinbim.com/extensions/files/x' })), /no public copy/);
+  assert.match(errs(paid({}, { download: 'https://store.lapinbim.com/api/download/x/1.0.0' })), /no public copy/);
+  // Today every kind may be sold, scripts too; the list is explicit.
+  assert.ok(PAID_KINDS.includes('script') && PAID_KINDS.includes('furniture'));
+  assert.deepEqual(validateManifest(paid({ kind: 'script', contents: { file: 'walls.py' }, permissions: ['model.write'] })), []);
 });

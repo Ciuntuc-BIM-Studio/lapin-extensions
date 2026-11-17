@@ -1,6 +1,6 @@
 # Lapin Extensions: termenii autorilor
 
-**PROIECT — de revizuit de un avocat înainte de publicare.** Versiunea 0.1, 12 noiembrie 2026. Textul de referință e cel în limba engleză (`legal/author-terms.md`); aceasta e copia lui în română.
+**PROIECT — de revizuit de un avocat înainte de publicare.** Versiunea 0.2, 17 noiembrie 2026 (adăugate extensiile plătite). Textul de referință e cel în limba engleză (`legal/author-terms.md`); aceasta e copia lui în română.
 
 Acești termeni se aplică atunci când publici o extensie în catalogul Lapin Extensions, prin store.lapinbim.com sau printr-un pull request în depozitul catalogului de pe GitHub. Catalogul e administrat de **Ciuntuc BIM Studio SRL**, Huși, România, CUI RO51725860, J2025031471009 („noi”). Contact: [hello@lapinbim.com](mailto:hello@lapinbim.com).
 
@@ -32,9 +32,18 @@ Utilizatorii primesc extensia sub licența **ta**, nu de la noi.
 
 Te conectezi în magazin cu contul tău de pe forum.lapinbim.com. Păstrăm numele și id-ul tău de pe forum împreună cu ce trimiți, ca doar tu să poți publica versiuni noi. [Nota de confidențialitate](privacy.html) spune ce păstrăm.
 
-## 5. Bani
+## 5. Bani și vânzarea unei extensii
 
-Publicarea e gratuită și nu luăm comision. Dacă vor exista extensii plătite, vor fi vândute de autorii lor prin propriul vânzător și sub termeni separați.
+Publicarea e gratuită și nu luăm comision, nici la extensiile gratuite, nici la cele plătite.
+
+Poți vinde o extensie (pachete de conținut și scripturi Python; alte feluri când le acceptă catalogul). Atunci:
+
+- **Tu ești vânzătorul.** O vinzi prin magazinul tău, la un furnizor acceptat de catalog (azi Lemon Squeezy sau Gumroad), care lucrează ca merchant of record sau ca serviciul tău de plată, după termenii lui. Tu stabilești prețul și, împreună cu furnizorul, emiți factura, te ocupi de TVA și de alte taxe, răspunzi cumpărătorului și hotărăști și faci rambursările. Noi nu suntem parte la vânzare și nu primim bani din ea.
+- **Ce spune manifestul e adevărat și ținut așa**: `purchase` numește furnizorul, id-ul produsului la el, pagina unde se cumpără și termenii tăi de vânzare și rambursare (o pagină https publică). Un preț arătat în manifest e orientativ; prețul e cel din pagina ta de plată.
+- **Noi doar o listăm.** O arătăm ca Plătită, cu prețul tău ca orientativ, o legătură Cumpără spre pagina ta de plată și „Vândută de <tine> prin <furnizor>”, cu legătura la termenii tăi.
+- **Pachetul rămâne privat.** Ne dai fișierul prin panoul magazinului sau, când publici prin GitHub, privat la [hello@lapinbim.com](mailto:hello@lapinbim.com); niciodată în depozitul public. La o extensie plătită, licența din secțiunea 2 acoperă păstrarea fișierului, verificarea lui, semnarea SHA-256-ului și darea lui celor a căror cheie de licență e bună după furnizorul tău, **în locul** unei copii publice. Nu îl publicăm, nu îl vindem și nu îl dăm altcuiva.
+- **Cheile de licență** sunt verificate prin API-ul public de licențe al furnizorului tău de fiecare dată când Lapin instalează sau actualizează extensia. Când rambursezi o cumpărare sau dezactivezi o cheie, furnizorul o spune și Lapin nu mai actualizează copia acelui cumpărător; ce e deja instalat rămâne la el. Cheile se revocă prin furnizor, cum spun termenii lui.
+- Extensiile plătite trec prin aceeași revizie ca cele gratuite (manifestul, capturi sau un exemplu și, la scripturi, citirea codului de un revizor, care primește fișierul doar pentru asta).
 
 ## 6. Răspunderea
 

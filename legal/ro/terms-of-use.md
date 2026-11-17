@@ -1,6 +1,6 @@
 # Lapin Extensions: termeni de utilizare
 
-**PROIECT — de revizuit de un avocat înainte de publicare.** Versiunea 0.1, 12 noiembrie 2026. Textul de referință e cel în limba engleză (`legal/terms-of-use.md`); aceasta e copia lui în română.
+**PROIECT — de revizuit de un avocat înainte de publicare.** Versiunea 0.2, 17 noiembrie 2026 (adăugate extensiile plătite). Textul de referință e cel în limba engleză (`legal/terms-of-use.md`); aceasta e copia lui în română.
 
 ## 1. Cine suntem
 
@@ -8,7 +8,7 @@ Lapin Extensions (catalogul de la `https://lapinbim.com/extensions/`, magazinul 
 
 ## 2. Ce e catalogul
 
-Catalogul listează extensii pentru Lapin făcute de autorii lor: pachete de conținut (mobilier, șabloane de proiect, tipuri, profile, hașuri, cartușe, liste de prețuri) și scripturi Python. Noi le listăm, păstrăm copii ale fișierelor, verificăm automat fiecare fișier și citim scripturile înainte să fie listate. Nu facem extensiile altor autori și nu le vindem: în această fază fiecare extensie e gratuită și nu luăm niciun comision.
+Catalogul listează extensii pentru Lapin făcute de autorii lor: pachete de conținut (mobilier, șabloane de proiect, tipuri, profile, hașuri, cartușe, liste de prețuri) și scripturi Python. Noi le listăm, păstrăm copii ale fișierelor, verificăm automat fiecare fișier și citim scripturile înainte să fie listate. Nu facem extensiile altor autori și nu le vindem: cele mai multe sunt gratuite, unele sunt vândute de autorii lor (secțiunea 3a), iar noi nu luăm niciun comision.
 
 ## 3. Fiecare extensie e a autorului ei
 
@@ -16,6 +16,13 @@ Catalogul listează extensii pentru Lapin făcute de autorii lor: pachete de con
 - Nu dăm nicio garanție pentru vreo extensie: e oferită așa cum e, fără promisiunea că e potrivită unui scop, exactă sau completă.
 - **Prețurile și normele** dintr-o listă de prețuri sunt ale autorului și doar orientative. Verifică-le cu ale tale înainte să te bazezi pe ele.
 - **Scripturile** pot face pe calculatorul tău ce poți face tu. Lapin nu rulează niciodată singur un script; îl rulezi tu, pe răspunderea ta, după ce ai citit ce cere.
+
+## 3a. Extensiile plătite
+
+- O extensie marcată **Plătită** e vândută de autorul ei prin magazinul lui (furnizorul numit pe pagina ei, de exemplu Lemon Squeezy sau Gumroad). Contractul de vânzare e între tine și autor (cu furnizorul lui ca merchant of record sau serviciu de plată); noi nu suntem parte la el. Prețul arătat în catalog și în Lapin e orientativ; prețul e cel din pagina de plată a vânzătorului.
+- Termenii vânzătorului, legați de pe pagina extensiei („Vândută de … prin …”), guvernează vânzarea, factura, dreptul tău de retragere și rambursările. Rambursarea o ceri vânzătorului.
+- După cumpărare primești o **cheie de licență**. Lapin ți-o cere când instalează extensia și o trimite magazinului nostru, care o verifică la furnizorul vânzătorului și apoi îi dă lui Lapin fișierul. Cheia e păstrată pe calculatorul tău (în setările Lapin), nu de noi.
+- Lapin verifică din nou cheia când actualizează extensia. Dacă vânzătorul rambursează cumpărarea sau dezactivează cheia, extensia nu mai primește actualizări și Lapin spune asta; **ce e instalat rămâne instalat**. Fără conexiune la internet, o extensie instalată merge mai departe.
 
 ## 4. Folosirea catalogului
 

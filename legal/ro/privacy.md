@@ -1,6 +1,6 @@
 # Lapin Extensions: nota de confidențialitate
 
-**PROIECT — de revizuit de un avocat înainte de publicare.** Versiunea 0.1, 12 noiembrie 2026. Textul de referință e cel în limba engleză (`legal/privacy.md`); aceasta e copia lui în română.
+**PROIECT — de revizuit de un avocat înainte de publicare.** Versiunea 0.2, 17 noiembrie 2026 (adăugate extensiile plătite). Textul de referință e cel în limba engleză (`legal/privacy.md`); aceasta e copia lui în română.
 
 ## 1. Operatorul
 
@@ -14,6 +14,7 @@
 | **Un cookie de conectare** (`lapin_store`), aleator, fără date despre tine. | Ca să rămâi conectat. | Necesar serviciului cerut de tine. | 14 zile sau până te deconectezi. |
 | **Trimiterile tale**: câmpurile manifestului, fișierul și capturile încărcate și pull request-ul făcut din ele în depozitul public GitHub `Ciuntuc-BIM-Studio/lapin-extensions`. | Ca să revizuim și să publicăm extensia. | Contractul, art. 6 alin. (1) lit. b). | O trimitere nepublicată: ștearsă la 90 de zile după refuz sau retragere. O extensie publicată: cât timp e listată; manifestul ei rămâne în istoricul public al depozitului. |
 | **Numărul de descărcări**: pe extensie și versiune, și pe lună. Nicio adresă IP, niciun identificator, nimic despre cine a descărcat. | Ca autorii și utilizatorii să vadă cât e folosită o extensie. | Nu sunt date personale. | Păstrate. |
+| **O cheie de licență** a unei extensii plătite, trimisă de Lapin când o instalează sau o actualizează. | Ca să întrebăm furnizorul vânzătorului dacă cheia e bună pentru acea extensie și să dăm fișierul dacă este. | Contractul încheiat cu vânzătorul, pe care ne ceri să-l aducem la îndeplinire (art. 6 alin. (1) lit. b); interesul nostru legitim de a da fișierele plătite doar cumpărătorilor (art. 6 alin. (1) lit. f). | **Nu e păstrată**: trimisă furnizorului și uitată la sfârșitul cererii. Jurnalul nostru scrie doar ora, extensia, furnizorul și răspunsul (bună, rambursată sau dezactivată, necunoscută, furnizor indisponibil): niciodată cheia, niciodată adresa ta IP. Cheia rămâne pe calculatorul tău, în setările Lapin. |
 | **Date tehnice** cât e tratată o cerere: adresa ta IP (cum o raportează Cloudflare), ținută doar în memorie pentru limitele de cereri, niciodată scrisă pe disc; un hash cu sare al ei, cel mult o oră. | Ca să protejăm serviciul de abuz. | Interesul legitim, art. 6 alin. (1) lit. f). | O oră, în memorie. |
 
 Nu vindem date, nu le folosim pentru publicitate și nu facem profilare. Răsfoirea și instalarea extensiilor nu cer cont.
@@ -23,6 +24,7 @@ Nu vindem date, nu le folosim pentru publicitate și nu facem profilare. Răsfoi
 - **Cloudflare, Inc.** (rețeaua din fața serverelor noastre, DNS-ul și legătura cu ele): prelucrează cererile în numele nostru; transferurile în afara UE sunt acoperite de Cadrul UE–SUA privind confidențialitatea datelor și de clauzele contractuale standard.
 - **Hetzner Online GmbH**, Germania: găzduiește serverele.
 - **GitHub, Inc.**: depozitul public al catalogului, unde o trimitere devine un pull request făcut de contul nostru; ce pui în manifest (numele de autor, legăturile) devine public acolo.
+- **Furnizorul vânzătorului** unei extensii plătite (**Lemon Squeezy LLC** sau **Gumroad, Inc.**, Statele Unite): primește de la serverul nostru cheia de licență pe care o introduci, ca să spună dacă e bună; are deja cumpărarea ta, ca furnizor al vânzătorului, după propria politică de confidențialitate. Nu îi trimitem nimic altceva despre tine.
 - **Forumul** (forum.lapinbim.com, administrat de noi pe Discourse) e furnizorul de identitate; contului tău de pe forum i se aplică [politica lui de confidențialitate](https://forum.lapinbim.com/privacy).
 
 ## 4. Drepturile tale

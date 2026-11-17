@@ -243,6 +243,47 @@
     "indicative": {
       "type": "boolean",
       "description": "A price list's prices and a rule pack's values (and norms) are the author's and indicative: true for every price list and rule pack."
+    },
+    "purchase": {
+      "description": "A paid extension (stage 2a, lapin-pro docs/plan-extensions.md §12): sold by its author through their own shop; the store gives the package to a licence key the provider says is valid. Its package.url is then https://store.lapinbim.com/api/licensed/<id>/<version> and it has no mirror or download (tools/lib.mjs checks that).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provider",
+        "productId",
+        "checkoutUrl",
+        "terms"
+      ],
+      "properties": {
+        "provider": {
+          "enum": [
+            "lemonsqueezy",
+            "gumroad"
+          ],
+          "description": "The author's shop, whose public licence API the store asks."
+        },
+        "productId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_=+/.-]{1,100}$",
+          "description": "The product's id at its provider (Lemon Squeezy: the product number; Gumroad: product_id)."
+        },
+        "checkoutUrl": {
+          "type": "string",
+          "pattern": "^https://",
+          "description": "Where it is bought (the Buy button)."
+        },
+        "terms": {
+          "type": "string",
+          "pattern": "^https://",
+          "description": "The seller's terms of sale and refunds."
+        },
+        "price": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40,
+          "description": "Shown only, as indicative (29 EUR); the price is the seller's."
+        }
+      }
     }
   },
   "allOf": [
@@ -282,6 +323,33 @@
         "properties": {
           "permissions": {
             "maxItems": 0
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": [
+          "purchase"
+        ]
+      },
+      "then": {
+        "properties": {
+          "package": {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "mirror"
+                  ]
+                },
+                {
+                  "required": [
+                    "download"
+                  ]
+                }
+              ]
+            }
           }
         }
       }

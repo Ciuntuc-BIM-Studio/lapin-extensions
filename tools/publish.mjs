@@ -6,6 +6,9 @@
 //   extensions/index.json.sig    the index's own signature (lapin-signature v1)
 //   extensions/files/<id>/<version>/<file>   the copies, each downloaded from its manifest's url and checked (size, SHA-256)
 //   site/                        the store's pages (site/build.mjs) for that index
+//   paid/<id>/<version>/<file>   paid packages (stage 2a) handed over privately, from private/ (git-ignored), checked;
+//                                uploaded to <dir>/store-data/paid/, which the store serves only to a valid licence key
+//                                (never under public/). A paid package the author uploaded to the store is already there.
 //
 //   node tools/publish.mjs                        signed with ~/.lapin/store-key.pem (its password: the keychain item
 //                                                 lapin-store-key, or LAPIN_STORE_KEY_PASSWORD)
@@ -21,7 +24,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildSite } from '../site/build.mjs';
 import { buildIndex, readManifests } from './catalogue.mjs';
-import { MAX_PACKAGE, sha256 } from './lib.mjs';
+import { isPaid, MAX_PACKAGE, sha256 } from './lib.mjs';
 import { DEFAULT_KEY, loadKeyFile, signIndex } from './sign.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -43,8 +46,20 @@ const die = (msg) => { console.error(`✗ ${msg}`); process.exit(1); };
 let index;
 try { index = buildIndex(readManifests(root), { mirror, download }); } catch (e) { die(e.message); }
 
-// The copies: each package checked before it is kept.
+// The copies: each package checked before it is kept. A paid one gets no public copy: its file, when handed over privately
+// (private/<id>/<version>/<file>), is checked and kept apart for the store's paid folder.
 for (const m of index.extensions) {
+  if (isPaid(m)) {
+    const own = join(root, 'private', m.id, m.version, m.contents.file);
+    if (!existsSync(own)) { console.log(`  paid ${m.id} ${m.version}: no private/ copy here (the store keeps the file its author uploaded)`); continue; }
+    const bytes = readFileSync(own);
+    if (bytes.length !== m.package.size || sha256(bytes) !== m.package.sha256) die(`${m.id}: private/${m.id}/${m.version}/${m.contents.file} is not the file its manifest names (size or SHA-256)`);
+    const to = join(out, 'paid', m.id, m.version, m.contents.file);
+    mkdirSync(dirname(to), { recursive: true });
+    writeFileSync(to, bytes);
+    console.log(`  paid ${m.id} ${m.version}: kept for the store's paid folder`);
+    continue;
+  }
   const path = join(out, 'extensions', 'files', m.id, m.version, m.contents.file);
   if (existsSync(path) && sha256(readFileSync(path)) === m.package.sha256) continue;
   const res = await fetch(m.package.url, { redirect: 'follow' }).catch((e) => die(`${m.id}: ${e.message}`));
@@ -91,9 +106,15 @@ if (argv.includes('--upload')) {
     const r = spawnSync('rsync', ['-rlt', ...(del ? ['--delete'] : []), from, to], { stdio: 'inherit' });
     if (r.status !== 0) die(`rsync to ${to} failed`);
   }
+  // Paid packages to the store's own folder, outside public/: served to a valid licence key only.
+  if (existsSync(join(out, 'paid'))) {
+    const r = spawnSync('rsync', ['-rlt', join(out, 'paid') + '/', `${server}:${dir}/store-data/paid/`], { stdio: 'inherit' });
+    if (r.status !== 0) die('rsync of the paid packages failed');
+  }
   // The store container runs as 1000:1000 and reads only: directories 755, files 644.
   const pub = `${dir}/store-data/public`;
-  const fix = spawnSync('ssh', ['-o', 'BatchMode=yes', server, `chown -R 1000:1000 '${pub}' && find '${pub}' -type d -exec chmod 755 {} + && find '${pub}' -type f -exec chmod 644 {} +`], { stdio: 'inherit' });
+  const paid = `${dir}/store-data/paid`;
+  const fix = spawnSync('ssh', ['-o', 'BatchMode=yes', server, `chown -R 1000:1000 '${pub}' && find '${pub}' -type d -exec chmod 755 {} + && find '${pub}' -type f -exec chmod 644 {} + && if [ -d '${paid}' ]; then chown -R 1000:1000 '${paid}' && find '${paid}' -type d -exec chmod 750 {} + && find '${paid}' -type f -exec chmod 640 {} +; fi`], { stdio: 'inherit' });
   if (fix.status !== 0) die(`setting the modes under ${pub} failed`);
   console.log(`uploaded to ${target}`);
 } else {

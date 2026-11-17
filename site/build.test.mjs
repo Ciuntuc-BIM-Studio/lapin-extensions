@@ -19,6 +19,9 @@ const index = {
   format: 'lapin-extensions-index', version: 1, extensions: [
     base({ id: 'ro.x.living', name: 'Living <script>alert(1)</script>', summary: 'Sofas & tables', kind: 'furniture', license: 'CC-BY-4.0', contents: { file: 'a.lapinlib', items: ['Sofa'] }, screenshots: ['https://example.org/shot.webp'], forum: 'https://forum.lapinbim.com/t/1' }),
     base({ id: 'ro.x.prices', name: 'Prețuri', summary: 'Indicative prices', kind: 'priceList', license: 'CC-BY-NC-4.0', indicative: true, contents: { file: 'p.lapinprices' }, author: { name: 'Ana Pop', forum: 'ana' } }),
+    base({ id: 'ro.x.paid', name: 'Paid walls', summary: 'Sold', kind: 'types', license: 'LicenseRef-Ana-EULA', contents: { file: 't.lapintypes' }, author: { name: 'Ana Pop', forum: 'ana' },
+      package: { url: 'https://store.lapinbim.com/api/licensed/ro.x.paid/1.2.0', sha256: 'c'.repeat(64), size: 900 },
+      purchase: { provider: 'lemonsqueezy', productId: '42', checkoutUrl: 'https://ana.lemonsqueezy.com/buy/x', terms: 'https://ana.example/terms', price: '29 EUR' } }),
     base({ id: 'ro.x.walls', name: 'Walls script', summary: 'Four walls', kind: 'script', license: 'GPL-3.0-only', permissions: ['model.write'], contents: { file: 'w.py' } }),
   ],
 };
@@ -78,4 +81,16 @@ test('the helpers', () => {
   assert.equal(licenceMark('LicenseRef-Firm'), 'terms');
   assert.equal(markdown('# T\n\nA **b** [c](https://x.ro) <i>\n\n- one\n- two'), '<h2>T</h2>\n<p>A <strong>b</strong> <a href="https://x.ro">c</a> &lt;i&gt;</p>\n<ul><li>one</li><li>two</li></ul>');
   assert.equal(markdown('[x](javascript:alert(1))'), '<p>[x](javascript:alert(1))</p>');
+});
+
+test('a paid extension: Paid and its price on its card; Buy at the seller\'s, sold by its author through its provider, their terms, no download', () => {
+  assert.match(read('index.html'), /data-extension="ro.x.paid"[\s\S]*?data-paid[^>]*>Paid · 29 EUR/);
+  assert.ok(!/data-extension="ro.x.living"[^]*?<\/a>/.exec(read('index.html'))[0].includes('data-paid'), 'a free one is not marked');
+  const html = read('extension/ro.x.paid/index.html');
+  assert.ok(html.includes('href="https://ana.lemonsqueezy.com/buy/x"') && html.includes('data-buy-link'));
+  assert.ok(html.includes('Sold by Ana Pop through Lemon Squeezy.'));
+  assert.ok(html.includes('href="https://ana.example/terms"'));
+  assert.ok(html.includes('29 EUR, indicative'));
+  assert.ok(!html.includes('data-download') && !html.includes('data-downloads='), 'no download, no public count');
+  assert.ok(!html.includes('api/licensed'), 'the licensed address is Lapin\'s, not a link');
 });

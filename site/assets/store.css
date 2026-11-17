@@ -73,6 +73,7 @@ main { max-width: 1160px; margin: 0 auto; padding: 28px 16px 56px; }
 .chip { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 11.5px; font-weight: 600; border: 1px solid var(--rule-strong); background: var(--wash); color: var(--ink); white-space: nowrap; }
 .chip.ok { border-color: var(--ok); color: var(--ok); background: transparent; }
 .chip.warn { border-color: var(--accent); color: var(--accent); background: var(--accent-wash); }
+.chip.paid { border-color: var(--ink); color: var(--ink); background: transparent; }
 
 .crumbs { font-size: 13px; color: var(--ink-muted); }
 .version { font-weight: 400; font-size: 20px; }
@@ -81,6 +82,9 @@ main { max-width: 1160px; margin: 0 auto; padding: 28px 16px 56px; }
 .install { padding: 16px; border: 1px solid var(--accent); border-radius: 3px; background: var(--accent-wash); }
 .install h2 { margin-top: 0; color: var(--ink); }
 .install p { margin: 0 0 10px; }
+.buy { margin-top: 12px; padding: 16px; border: 1px solid var(--rule-strong); border-radius: 3px; }
+.buy h2 { margin-top: 0; }
+.buy p { margin: 0 0 10px; }
 .id { word-break: break-all; }
 .facts { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 7px 14px; margin: 0; font-size: 14px; }
 .facts dt { color: var(--ink-muted); }

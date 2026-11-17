@@ -56,6 +56,29 @@ The full schema is [`schema/manifest.schema.json`](schema/manifest.schema.json).
 - **Nothing harmful**: no malware, no data collection a script does not declare (`permissions`), nothing illegal, nothing that misleads about what it is or who made it.
 - **The file in the release does not change.** A new file is a new version. A file whose SHA-256 no longer matches fails the check and is not installed by Lapin.
 
+## Selling an extension
+
+Content packs and Python scripts may be **sold by their authors** through their own shop; the catalogue takes no
+commission and is not a party to the sale (the author terms, section 5). Providers accepted today: **Lemon Squeezy** and
+**Gumroad**, both with a public licence-key API. A paid manifest adds:
+
+```json
+"purchase": {
+  "provider": "gumroad",
+  "productId": "<the product's id at the provider>",
+  "checkoutUrl": "https://you.gumroad.com/l/your-product",
+  "terms": "https://you.example/terms-of-sale",
+  "price": "29 EUR"
+}
+```
+
+and its `package.url` is the store's licensed address, `https://store.lapinbim.com/api/licensed/<id>/<version>`, with no
+`mirror` or `download`: the store keeps the file privately and gives it only to a licence key the provider says is valid.
+**The package is never put in this repository or in a public release.** Submit through store.lapinbim.com (the file goes
+straight to the store's private folder), or open a pull request with the manifest and send the file privately to
+hello@lapinbim.com; maintainers put it in `private/<id>/<version>/` (git-ignored), where `tools/validate.mjs` and
+`tools/publish.mjs` read it. The public check validates the manifest only. An example: `examples/paid/`.
+
 ## Review
 
 - **Automatic** (every pull request, `.github/workflows/validate.yml`): the manifest against the schema, the file downloaded and its size and SHA-256 compared, the file checked as its kind's (a furniture library's items, a type pack's types, a `.pat` file's patterns, a price list's rows…), the catalogue's own rules tested (`npm test`), a changed extension's version raised, the author matching.

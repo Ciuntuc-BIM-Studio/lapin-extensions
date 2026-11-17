@@ -8,7 +8,7 @@
     "node": ">=22"
   },
   "scripts": {
-    "test": "node --test tools/lib.test.mjs tools/sign.test.mjs site/build.test.mjs",
+    "test": "node --test tools/lib.test.mjs tools/catalogue.test.mjs tools/sign.test.mjs site/build.test.mjs",
     "validate": "node tools/validate.mjs",
     "validate:local": "node tools/validate.mjs --local",
     "index": "node tools/build-index.mjs",

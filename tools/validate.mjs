@@ -6,13 +6,15 @@
 //   node tools/validate.mjs --base origin/main      a changed extension's version must be higher than on that ref
 //   node tools/validate.mjs --pr-author <login> [--maintainer]
 //                                                   an extension already listed is changed by its author only (or a maintainer)
-// A package is checked for its size and SHA-256 against the manifest, then as its kind's file (lib.mjs). Exit 1 on any
-// problem, each one printed. Node 22, no dependencies.
+// A package is checked for its size and SHA-256 against the manifest, then as its kind's file (lib.mjs). A paid one
+// (stage 2a) has no public copy: it is read from private/<id>/<version>/<file> (git-ignored: the file the author handed
+// over privately) when the maintainer has it there, else only its manifest is checked here (the store checked the file
+// when the author uploaded it). Exit 1 on any problem, each one printed. Node 22, no dependencies.
 import { execFileSync } from 'node:child_process';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { checkPackage, isNonCommercial, isPermissive, MAX_PACKAGE, SCREENSHOT_FILE, sha256, validateManifest } from './lib.mjs';
+import { checkPackage, isNonCommercial, isPaid, isPermissive, MAX_PACKAGE, PROVIDERS, SCREENSHOT_FILE, sha256, validateManifest } from './lib.mjs';
 
 const MAX_SCREENSHOT = 2 * 1024 * 1024;
 
@@ -39,7 +41,11 @@ function previous(id) {
   try { return JSON.parse(execFileSync('git', ['show', `${base}:extensions/${id}/manifest.json`], { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] })); } catch { return null; }
 }
 
+/** A paid package handed over privately: private/<id>/<version>/<file> (never in git). */
+const privatePath = (m) => join(root, 'private', m.id, m.version, m.contents.file);
+
 async function packageBytes(m) {
+  if (isPaid(m)) return existsSync(privatePath(m)) ? readFileSync(privatePath(m)) : null;
   if (local) {
     const f = join(root, 'dist', m.id, m.contents.file);
     if (!existsSync(f)) throw new Error(`no ${f} (node tools/make-examples.mjs, or put the file there)`);
@@ -79,12 +85,14 @@ for (const id of ids) {
   if (!before && prAuthor && !maintainer && m.author.github && m.author.github.toLowerCase() !== prAuthor.toLowerCase()) fail(id, `author.github is @${m.author.github}, the pull request is @${prAuthor}'s`);
   try {
     const bytes = await packageBytes(m);
+    const sold = isPaid(m) ? `, paid: ${PROVIDERS[m.purchase.provider]} ${m.purchase.productId}${m.purchase.price ? `, ${m.purchase.price}` : ''}` : '';
+    if (!bytes) { console.log(`✓ ${id} ${m.version} (${m.kind}, ${m.license}${sold}): the manifest only; the package is checked privately (the store at upload, or private/${id}/${m.version}/${m.contents.file})`); continue; }
     if (bytes.length !== m.package.size) fail(id, `the package is ${bytes.length} bytes, the manifest says ${m.package.size}`);
     else if (sha256(bytes) !== m.package.sha256) fail(id, `the package's SHA-256 is ${sha256(bytes)}, the manifest says ${m.package.sha256}`);
     else {
       const items = checkPackage(m.kind, bytes);
       const terms = isNonCommercial(m.license) ? ", non-commercial" : isPermissive(m.license) ? ", permissive" : ", read its terms";
-      console.log(`✓ ${id} ${m.version} (${m.kind}, ${m.license}${terms})${items.length ? `: ${items.slice(0, 6).join(', ')}${items.length > 6 ? '…' : ''}` : ''}`);
+      console.log(`✓ ${id} ${m.version} (${m.kind}, ${m.license}${terms}${sold})${items.length ? `: ${items.slice(0, 6).join(', ')}${items.length > 6 ? '…' : ''}` : ''}`);
     }
   } catch (e) { fail(id, `package: ${e.message}`); }
 }

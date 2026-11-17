@@ -1,6 +1,6 @@
 # Lapin Extensions: author terms
 
-**DRAFT — to be reviewed by a lawyer before publication.** Version 0.1, 12 November 2026.
+**DRAFT — to be reviewed by a lawyer before publication.** Version 0.2, 17 November 2026 (paid extensions added).
 
 These terms apply when you publish an extension in the Lapin Extensions catalogue, through store.lapinbim.com or through a pull request to the catalogue's repository on GitHub. The catalogue is run by **Ciuntuc BIM Studio SRL**, Huși, Romania, CUI RO51725860, J2025031471009 ("we"). Contact: [hello@lapinbim.com](mailto:hello@lapinbim.com).
 
@@ -32,9 +32,18 @@ Users receive the extension under **your** licence, not from us.
 
 You sign in to the store with your forum.lapinbim.com account. We record your forum user name and id with what you submit, so only you can publish new versions. The [privacy notice](privacy.html) says what we keep.
 
-## 5. Money
+## 5. Money, and selling an extension
 
-Publishing is free, and we take no commission. If paid extensions are offered later, they will be sold by their authors through their own seller and under separate terms.
+Publishing is free, and we take no commission, on free or paid extensions.
+
+You may sell an extension (content packs and Python scripts; other kinds when the catalogue allows them). Then:
+
+- **You are the seller.** You sell it through your own shop at a provider the catalogue accepts (today Lemon Squeezy or Gumroad), which acts as the merchant of record or as your payment service under its own terms. You set the price, and you, with your provider, issue the invoice, handle VAT and other taxes, answer the buyer, and decide and make refunds. We are not a party to the sale and receive no money from it.
+- **What the manifest says is true and kept so**: `purchase` names your provider, the product's id there, the page where it is bought and your terms of sale and refunds (a public https page). A price you show in the manifest is indicative; the price is the one at your checkout.
+- **We only list it.** We show it as Paid, with your price as indicative, a Buy link to your checkout and "Sold by <you> through <provider>" with a link to your terms.
+- **The package stays private.** You hand the file over through the store's dashboard, or privately to [hello@lapinbim.com](mailto:hello@lapinbim.com) when you publish through GitHub; never in the public repository. For a paid extension, the licence in section 2 covers keeping the file, checking it, signing its SHA-256, and giving it to people whose licence key your provider says is valid, **instead of** a public copy. We do not publish it, sell it or give it to anyone else.
+- **Licence keys** are checked with your provider's public licence API each time Lapin installs or updates the extension. When you refund a purchase or disable a key, your provider reports it and Lapin stops updating that buyer's copy; what is already installed stays with them. Revoke keys through your provider, as its terms say.
+- Paid extensions go through the same review as free ones (the manifest, screenshots or a sample, and for scripts a reading of the code by a reviewer, who receives the file for that purpose only).
 
 ## 6. Liability
 

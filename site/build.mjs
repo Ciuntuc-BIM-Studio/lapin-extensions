@@ -7,14 +7,16 @@
 // Pages: the list (search and kind filters; it works without JavaScript, the script only filters), one page per extension
 // at /extension/<id>/ (/extensions/ is the catalogue itself: index.json and the files)
 // (description, screenshots, versions, licence marked permissive / read its terms / non-commercial, the Lapin versions it
-// works with, size, SHA-256, author, homepage, forum topic, how to install it in Lapin, downloads counted by the store),
+// works with, size, SHA-256, author, homepage, forum topic, how to install it in Lapin, downloads counted by the store; a
+// paid one (stage 2a): Paid, its price as indicative, Buy at its seller's, "Sold by … through …" with the seller's terms,
+// and no download: the store gives its file to a licence key only),
 // author pages, how to publish, the legal drafts (legal/*.md). The author dashboard and the API are the store service's
 // (lapin-pro: deploy/store/). Every text from a manifest is escaped. Node 22, no dependencies.
 import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildIndex, readManifests, versionsOf } from '../tools/catalogue.mjs';
-import { isNonCommercial, isPermissive, KINDS, SCREENSHOT_FILE } from '../tools/lib.mjs';
+import { isNonCommercial, isPaid, isPermissive, KINDS, PROVIDERS, SCREENSHOT_FILE } from '../tools/lib.mjs';
 import { STRINGS, t } from './strings.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -114,6 +116,9 @@ ${body}
 `;
 }
 
+/** A paid extension's mark: Paid, and its price when it says one (indicative: the seller's is the price). */
+const paidChip = (lang, m) => `<span class="chip paid" data-paid title="${esc(t(lang, 'paid.title'))}">${esc(t(lang, 'paid.label'))}${m.purchase.price ? ` · ${esc(m.purchase.price)}` : ''}</span>`;
+
 const chip = (lang, mark) => `<span class="chip ${mark === 'permissive' ? 'ok' : 'warn'}" data-licence="${mark}" title="${esc(t(lang, `licence.${mark}.title`))}">${esc(t(lang, `licence.${mark === 'nc' ? 'nc' : mark}`))}</span>`;
 
 function card(lang, base, m) {
@@ -123,7 +128,7 @@ function card(lang, base, m) {
   <span class="card-kind eyebrow">${esc(t(lang, `kind.${m.kind}`))}</span>
   <span class="card-name">${esc(m.name)}</span>
   <span class="card-summary">${esc(m.summary)}</span>
-  <span class="card-foot"><span class="muted">${esc(m.author.name)} · ${esc(m.version)}</span>${mark === 'permissive' ? '' : ` ${chip(lang, mark)}`}</span>
+  <span class="card-foot"><span class="muted">${esc(m.author.name)} · ${esc(m.version)}</span>${isPaid(m) ? ` ${paidChip(lang, m)}` : ''}${mark === 'permissive' ? '' : ` ${chip(lang, mark)}`}</span>
 </a>`;
 }
 
@@ -184,9 +189,16 @@ function extensionPage(lang, base, m, { versions = [], store }) {
         <h2>${esc(T('x.install'))}</h2>
         <p>${esc(T('x.install.how', { name: m.name }))}</p>
         <p><code class="id">${esc(m.id)}</code> <button type="button" class="btn small" data-copy="${esc(m.id)}" data-copied="${esc(T('x.install.copied'))}">${esc(T('x.install.copy'))}</button></p>
-        <p><a class="btn small" href="${href(download)}" rel="nofollow" data-download>${esc(T('x.download'))}</a></p>
-        <p class="muted small">${esc(T('x.download.note'))}</p>
+        ${isPaid(m) ? `<p class="muted small">${esc(T('paid.install'))}</p>` : `<p><a class="btn small" href="${href(download)}" rel="nofollow" data-download>${esc(T('x.download'))}</a></p>
+        <p class="muted small">${esc(T('x.download.note'))}</p>`}
       </div>
+      ${isPaid(m) ? `<div class="buy" data-buy>
+        <h2>${paidChip(lang, m)}</h2>
+        ${m.purchase.price ? `<p class="muted small">${esc(T('paid.price', { price: m.purchase.price }))}</p>` : ''}
+        <p><a class="btn primary" href="${href(m.purchase.checkoutUrl)}" rel="nofollow noopener" data-buy-link>${esc(T('paid.buy'))}</a></p>
+        <p class="small">${T('paid.soldBy', { author: esc(m.author.name), provider: esc(PROVIDERS[m.purchase.provider] ?? m.purchase.provider) })} <a href="${href(m.purchase.terms)}" rel="nofollow noopener" data-seller-terms>${esc(T('paid.terms'))}</a></p>
+        <p class="muted small">${esc(T('paid.note'))}</p>
+      </div>` : ''}
       ${dl([
         ['x.kind', esc(T(`kind.${m.kind}`))],
         ['x.goes', esc(T(`where.${m.kind}`))],
@@ -200,7 +212,7 @@ function extensionPage(lang, base, m, { versions = [], store }) {
         m.languages?.length ? ['x.languages', esc(m.languages.join(', '))] : null,
         m.homepage ? ['x.homepage', `<a href="${href(m.homepage)}">${esc(m.homepage.replace(/^https:\/\//, ''))}</a>`] : null,
         m.forum ? ['x.forum', `<a href="${href(m.forum)}">forum.lapinbim.com</a>`] : null,
-        store ? ['x.downloads', `<span data-downloads="${esc(m.id)}" data-stats="${esc(store)}">–</span>`] : null,
+        store && !isPaid(m) ? ['x.downloads', `<span data-downloads="${esc(m.id)}" data-stats="${esc(store)}">–</span>`] : null,
       ])}
     </aside>
   </div>

@@ -4,7 +4,7 @@
 import { execFileSync } from 'node:child_process';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { validateManifest } from './lib.mjs';
+import { isPaid, validateManifest } from './lib.mjs';
 
 /** Every manifest, by id; throws the first problem (a bad manifest stops a build). */
 export function readManifests(root) {
@@ -22,7 +22,8 @@ export function readManifests(root) {
 /**
  * The index of the manifests. `mirror`: each package also named at <mirror><id>/<version>/<file> (lapinbim.com's copy);
  * `download`: each package's counting address <download><id>/<version> (store.lapinbim.com's, which redirects to the
- * copy); `local`: the packages named by their paths in dist/ (a catalogue on this computer).
+ * copy); `local`: the packages named by their paths in dist/ (a catalogue on this computer). A paid extension (stage 2a)
+ * keeps its store address (it gives the file to a licence key only): no copy, no counting address.
  */
 export function buildIndex(manifests, { local = false, mirror = null, download = null, root = '.', now = new Date() } = {}) {
   const slash = (u) => u.replace(/\/?$/, '/');
@@ -35,6 +36,7 @@ export function buildIndex(manifests, { local = false, mirror = null, download =
       delete m.package.download;
       return m;
     }
+    if (isPaid(m)) return m;
     if (mirror) m.package.mirror = `${slash(mirror)}${m.id}/${m.version}/${m.contents.file}`;
     if (download) m.package.download = `${slash(download)}${m.id}/${m.version}`;
     return m;

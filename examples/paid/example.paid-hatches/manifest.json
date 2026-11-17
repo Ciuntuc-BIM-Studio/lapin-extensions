@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "id": "example.paid-hatches",
+  "name": "EXAMPLE paid hatches (not published)",
+  "summary": "A test of a paid extension: never in extensions/, so never in the index, the site or a publication.",
+  "description": "Stage 2a's example (lapin-pro docs/plan-extensions.md §12). To try the flow end to end, copy this folder into extensions/ of a local working copy (never main), its package into private/example.paid-hatches/1.0.0/, and point purchase at a test product of your own shop.",
+  "version": "1.0.0",
+  "author": { "name": "Ciuntuc BIM Studio", "github": "Ciuntuc-BIM-Studio" },
+  "license": "LicenseRef-Example-EULA",
+  "lapin": ">=0.1.900",
+  "kind": "hatches",
+  "tags": ["example", "paid"],
+  "contents": { "file": "brick-ro.pat", "items": ["BRICK-RO"] },
+  "package": { "url": "https://store.lapinbim.com/api/licensed/example.paid-hatches/1.0.0", "sha256": "1d73d345c20cb1851c4445cb41fc96988098a711fcc97e8906c6170ff98e6678", "size": 73 },
+  "purchase": {
+    "provider": "gumroad",
+    "productId": "EXAMPLE-not-a-real-product",
+    "checkoutUrl": "https://example.gumroad.com/l/paid-hatches",
+    "terms": "https://example.gumroad.com/terms",
+    "price": "5 EUR"
+  }
+}
