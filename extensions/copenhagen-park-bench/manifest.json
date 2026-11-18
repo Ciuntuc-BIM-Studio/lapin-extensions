@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "id": "copenhagen-park-bench",
+  "name": "Copenhagen Park Bench",
+  "summary": "1800 mm outdoor Copenhagen park bench with European oak slats, cast-iron frames, and stainless fasteners.",
+  "description": "Detailed 1.80 x 0.66 x 0.85 m outdoor park bench modeled in Lite-STEP. Includes seven contoured oak seat slats, five backrest slats, solid oak armrest caps, three cast-iron leg frames with tie rods, and stainless carriage/anchor bolts.",
+  "screenshots": [
+    "screenshot.png"
+  ],
+  "version": "1.0.0",
+  "author": {
+    "name": "David Arbirk",
+    "github": "arbirk",
+    "url": "https://ginnung.tech/",
+    "forum": "arbirk"
+  },
+  "license": "MIT",
+  "lapin": ">=0.1.900",
+  "kind": "furniture",
+  "tags": [
+    "bench",
+    "park",
+    "outdoor",
+    "furniture",
+    "oak",
+    "cast-iron"
+  ],
+  "languages": [
+    "en"
+  ],
+  "contents": {
+    "file": "output.lapinlib",
+    "items": [
+      "Park Bench"
+    ]
+  },
+  "package": {
+    "url": "https://store.lapinbim.com/packages/copenhagen-park-bench/1.0.0/output.lapinlib",
+    "sha256": "b04e679c0ebaccc60b749aaecfc62120d5cb3dd705581ebabbf7526c42be768c",
+    "size": 457099
+  }
+}
