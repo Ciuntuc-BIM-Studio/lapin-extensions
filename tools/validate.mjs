@@ -6,6 +6,11 @@
 //   node tools/validate.mjs --base origin/main      a changed extension's version must be higher than on that ref
 //   node tools/validate.mjs --pr-author <login> [--maintainer]
 //                                                   an extension already listed is changed by its author only (or a maintainer)
+//   node tools/validate.mjs --pr-author <login> --store
+//                                                   a pull request opened by store.lapinbim.com (a store/… branch of this
+//                                                   repository, which only the store's token and the maintainers push): its
+//                                                   author is the forum account the store signed in (author.forum), not
+//                                                   the GitHub account that opened it; author.github is the author's claim
 // A package is checked for its size and SHA-256 against the manifest, then as its kind's file (lib.mjs). A paid one
 // (stage 2a) has no public copy: it is read from private/<id>/<version>/<file> (git-ignored: the file the author handed
 // over privately) when the maintainer has it there, else only its manifest is checked here (the store checked the file
@@ -27,6 +32,7 @@ const only = opt('--only')?.split(',').map((s) => s.trim()).filter(Boolean);
 const base = opt('--base');
 const prAuthor = opt('--pr-author');
 const maintainer = flag('--maintainer');
+const store = flag('--store');
 
 const SEMVER = /^(\d+)\.(\d+)\.(\d+)(?:-([0-9A-Za-z.-]+))?/;
 function newer(a, b) {
@@ -80,9 +86,14 @@ for (const id of ids) {
   const before = previous(id);
   if (before && JSON.stringify(before) !== JSON.stringify(m)) {
     if (!newer(m.version, before.version)) fail(id, `changed, so its version must be higher than ${before.version}`);
-    if (prAuthor && !maintainer && before.author?.github && before.author.github.toLowerCase() !== prAuthor.toLowerCase()) fail(id, `listed by @${before.author.github}: only its author (or a maintainer) changes it`);
+    if (store && !maintainer) {
+      // The store signed its author in on the forum: the one who listed it, by the same forum account, changes it.
+      if (!m.author.forum) fail(id, 'sent through the store, so author.forum (the account the store signed in) must be set');
+      else if (before.author?.forum?.toLowerCase() !== m.author.forum.toLowerCase()) fail(id, before.author?.forum ? `listed by forum user ${before.author.forum}: only its author (or a maintainer) changes it` : `listed from GitHub${before.author?.github ? ` by @${before.author.github}` : ''}, not through the store: its author changes it by a pull request (or a maintainer)`);
+    } else if (prAuthor && !maintainer && before.author?.github && before.author.github.toLowerCase() !== prAuthor.toLowerCase()) fail(id, `listed by @${before.author.github}: only its author (or a maintainer) changes it`);
   }
-  if (!before && prAuthor && !maintainer && m.author.github && m.author.github.toLowerCase() !== prAuthor.toLowerCase()) fail(id, `author.github is @${m.author.github}, the pull request is @${prAuthor}'s`);
+  if (!before && store && !maintainer && !m.author.forum) fail(id, 'sent through the store, so author.forum (the account the store signed in) must be set');
+  if (!before && !store && prAuthor && !maintainer && m.author.github && m.author.github.toLowerCase() !== prAuthor.toLowerCase()) fail(id, `author.github is @${m.author.github}, the pull request is @${prAuthor}'s`);
   try {
     const bytes = await packageBytes(m);
     const sold = isPaid(m) ? `, paid: ${PROVIDERS[m.purchase.provider]} ${m.purchase.productId}${m.purchase.price ? `, ${m.purchase.price}` : ''}` : '';
