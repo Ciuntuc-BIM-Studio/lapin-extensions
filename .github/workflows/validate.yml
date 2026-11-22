@@ -41,11 +41,14 @@ jobs:
           AUTHOR: ${{ github.event.pull_request.user.login }}
           ASSOCIATION: ${{ github.event.pull_request.author_association }}
           BASE: ${{ github.base_ref }}
+          # Opened by store.lapinbim.com: a store/… branch of this repository (a fork's branch never counts).
+          STORE: ${{ github.event.pull_request.head.repo.full_name == github.repository && startsWith(github.event.pull_request.head.ref, 'store/') }}
         run: |
           args=""
           if [ -n "$IDS" ]; then args="$args --only $IDS"; fi
           if [ -n "$BASE" ]; then args="$args --base origin/$BASE --pr-author $AUTHOR"; fi
           case "$ASSOCIATION" in OWNER|MEMBER) args="$args --maintainer";; esac
+          if [ "$STORE" = "true" ]; then args="$args --store"; fi
           node tools/validate.mjs $args
       - name: Build the index
         run: node tools/build-index.mjs
