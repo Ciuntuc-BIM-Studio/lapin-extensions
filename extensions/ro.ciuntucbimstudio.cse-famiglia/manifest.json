@@ -1,0 +1,56 @@
+{
+  "schema": 1,
+  "id": "ro.ciuntucbimstudio.cse-famiglia",
+  "name": "Famiglia CSE – site safety (Italy)",
+  "summary": "58 parametric parts for site safety on Italian road works and bridge repairs: barriers, fences, cones, temporary signs, traffic lights, flaggers, plant, cabins, site electrics.",
+  "description": "Famiglia CSE v2.1 by Fabio Emolo: apprestamenti di sicurezza (LOD 300) for the safety coordinator (CSE) on the maintenance of bridges and viaducts. Every part is parametric (lengths, sizes, sign supports on a stand, a post or on the ground, mesh and shade cloth on the New Jersey barriers…) and carries the property sets CSE_Apprestamento (description, standards, footprint, unit) and CSE_Gestione4D (phase, start and end phase, WBS, zone, contractor), meant for the phase drawings of a PSC with Lapin's Phases. The signs carry the official pictograms of the Italian Highway Code's regulation (from @road-signs/it, MIT). Names and properties are in Italian. Sign layouts and the standards named are indicative: check them against the D.M. 10/07/2002 and the D.I. 22/01/2019 for the real road. Footbridge and vehicle plate sizes are drawing parameters; their capacity and fixing are the contractor's to verify.",
+  "screenshots": [
+    "screenshot.webp",
+    "screenshot-2.webp",
+    "screenshot-3.webp"
+  ],
+  "version": "2.1.0",
+  "author": {
+    "name": "Fabio Emolo"
+  },
+  "license": "MIT",
+  "lapin": ">=0.1.1914",
+  "kind": "types",
+  "tags": [
+    "safety",
+    "site",
+    "road-works",
+    "bridges",
+    "signs",
+    "phases",
+    "italy"
+  ],
+  "languages": [
+    "it"
+  ],
+  "requires": [
+    "studio"
+  ],
+  "contents": {
+    "file": "CSE_Famiglia_v2.lapintypes",
+    "items": [
+      "Barriers: New Jersey in PE and in concrete (mesh and shade cloth optional), site fence, barrier fig. II 392, edge protection EN 13374",
+      "Crossings: pedestrian footbridge with guardrails, steel vehicle plate",
+      "Cones, raked cone tapers, flexible delineators, flashing yellow and steady red lamps",
+      "Temporary vertical signs fig. II 383–395, 31/a, 41, 45, 48, 50, 82, directional barrier II 393/a, supplementary and site panels",
+      "Temporary yellow road markings: continuous, broken, stop line, retroreflective studs",
+      "Traffic: portable traffic lights, flagger with red/green paddle, variable message trailer",
+      "Plant: under-bridge unit (working and travelling), cranes and tipper trucks, MEWP, operating vehicle, milling machine, paver, roller, truck mixer",
+      "Site services: cabins, chemical WC, container, skip, generators, lighting tower, first-aid post",
+      "Site electrics: generator, ASC board, earth rods, earth conductor, H07RN-F cable",
+      "42 CSE materials with fill colours for plans, sections and elevations"
+    ]
+  },
+  "package": {
+    "url": "https://github.com/Ciuntuc-BIM-Studio/lapin-extensions/releases/download/cse-famiglia-v2.1.0/CSE_Famiglia_v2.lapintypes",
+    "sha256": "537b0683f9b03b7768809b25f3fa5fed51f93f2b33c6fb4c2107ebd57f6b0b22",
+    "size": 4127583
+  },
+  "homepage": "https://github.com/Ciuntuc-BIM-Studio/lapin-extensions/tree/main/extensions/ro.ciuntucbimstudio.cse-famiglia",
+  "forum": "https://forum.lapinbim.com/c/lapin"
+}
