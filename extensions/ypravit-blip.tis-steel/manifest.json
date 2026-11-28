@@ -1,0 +1,41 @@
+{
+  "schema": 1,
+  "id": "ypravit-blip.tis-steel",
+  "name": "TIS steel sections (Thailand)",
+  "summary": "Thai standard steel sections: H-beams, channels, angles (TIS 1227), light lip channels (TIS 1228) and structural tubes (TIS 107).",
+  "description": "157 profiles by their nominal dimensions, shown under the standard TIS. Lapin works out the areas, masses and section properties. The dimensions are indicative: check them against your mill's table (SYS, TATA, etc.) before design.",
+  "version": "1.0.0",
+  "author": {
+    "name": "PRAVIT",
+    "github": "ypravit-blip"
+  },
+  "license": "CC-BY-4.0",
+  "lapin": ">=0.1.2322",
+  "kind": "profiles",
+  "tags": [
+    "thailand",
+    "tis",
+    "steel",
+    "profiles"
+  ],
+  "languages": [
+    "th",
+    "en"
+  ],
+  "contents": {
+    "file": "tis-steel.lapinprofiles",
+    "items": [
+      "H-beam 100×50 … 900×300 (33)",
+      "Channel [ 75 … 380 (16)",
+      "Equal angle L 20 … 250 (28)",
+      "Light lip channel C 60 … 250 (22)",
+      "Square/rectangular tube SHS/RHS (34)",
+      "Round tube CHS 21.7 … 216.3 (24)"
+    ]
+  },
+  "package": {
+    "url": "https://raw.githubusercontent.com/ypravit-blip/lapin-thai-packs/main/tis-steel/tis-steel.lapinprofiles",
+    "sha256": "3915ab08bafefbc2681f83a6bef30787bc1078afe8b49be35716f59d6528c41d",
+    "size": 18905
+  }
+}
