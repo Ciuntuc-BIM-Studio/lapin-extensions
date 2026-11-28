@@ -1,0 +1,44 @@
+{
+  "schema": 1,
+  "id": "ypravit-blip.thai-doors-windows",
+  "name": "Thai doors and windows",
+  "summary": "Door and window types in common Thai sizes: timber and PVC swing doors, aluminium sliding doors and sliding, casement, awning and fixed windows.",
+  "description": "21 types named in Thai, marked D1-D4 and W1-W5: timber doors 700-900×2000 on a 2×4 frame, a PVC bathroom door, double doors 1200 and 1600, aluminium sliding doors 1600-2400, and aluminium windows with 5 mm glass, heads at 2100. Sizes are the usual Thai ones; adjust frames and materials to your supplier.",
+  "version": "1.0.0",
+  "author": {
+    "name": "PRAVIT",
+    "github": "ypravit-blip"
+  },
+  "license": "CC-BY-4.0",
+  "lapin": ">=0.1.2322",
+  "kind": "types",
+  "tags": [
+    "thailand",
+    "doors",
+    "windows",
+    "types"
+  ],
+  "languages": [
+    "th",
+    "en"
+  ],
+  "contents": {
+    "file": "thai-doors-windows.lapintypes",
+    "items": [
+      "D1 ประตูไม้บานเปิดเดี่ยว 700/800/900×2000",
+      "D2 ประตู PVC ห้องน้ำ 700×2000",
+      "D3 ประตูไม้บานเปิดคู่ 1200/1600×2000",
+      "D4 ประตูบานเลื่อนอะลูมิเนียม 1600-2400",
+      "W1 หน้าต่างบานเปิดเดี่ยว",
+      "W2 หน้าต่างบานเปิดคู่",
+      "W3 หน้าต่างบานเลื่อน 2 บาน",
+      "W4 หน้าต่างบานกระทุ้ง",
+      "W5 ช่องแสงบานติดตาย"
+    ]
+  },
+  "package": {
+    "url": "https://raw.githubusercontent.com/ypravit-blip/lapin-thai-packs/main/thai-doors-windows/thai-doors-windows.lapintypes",
+    "sha256": "9fbb7fa90ea587f035683a28d6a6e2c111dd894f75c3867334b81abe828b795c",
+    "size": 19541
+  }
+}
